@@ -85,3 +85,5 @@ $router->resolve([
 	'method' => $_SERVER['REQUEST_METHOD'],
 ]);
 ````
+
+Click <a href="https://github.com/stein189/SimpleRoutingExample/tree/master">here</a> to see the working example.
