@@ -2,7 +2,7 @@
 
 namespace Szenis;
 
-use Route;
+use Szenis\Route;
 
 /**
  * Simple routing collection class
