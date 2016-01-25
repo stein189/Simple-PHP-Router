@@ -10,7 +10,7 @@ use Szenis\Route;
 class Router
 {
 	/**
-	 * an array with all the registerd routes
+	 * An array with all the registerd routes
 	 *
 	 * @var array
 	 */
@@ -19,7 +19,8 @@ class Router
 	/**
 	 * Add new route to routes array
 	 *
-	 * @param array $arguments
+	 * @param  string $url
+	 * @param  array  $arguments
 	 */
 	public function add($url, $arguments)
 	{	
@@ -28,6 +29,7 @@ class Router
 			throw new \Exception('Request method argument is missing for route: '.$url);
 		}
 
+		// if the method arguments is not an array throw an exception
 		if (!is_array($arguments['method'])) {
 			throw new \Exception('Request method should be an array for route: '.$url);
 		}
@@ -42,16 +44,20 @@ class Router
 			throw new \Exception('Class argument is missing');
 		}
 
+		// if the function argument is not provided throw an exception
 		if (!isset($arguments['function'])) {
 			throw new \Exception('Function argument is missing');
 		}
 		
+		// if the class argument is not provided throw an exception
 		if (!class_exists($arguments['class'])) {
 			throw new \Exception('Class '.$arguments['class'].' not found!');
 		}
 		
+		// get all the methods from the given class
 		$classMethods = get_class_methods($arguments['class']);
 		
+		// check if the given method exists in class, if not throw exception
 		if (!in_array($arguments['function'], $classMethods)) {
 			throw new \Exception('Function '.$arguments['function'].' does not exists in class '.$arguments['class']);
 		}
@@ -105,7 +111,7 @@ class Router
 					continue;
 				}
 
-				// if there is a place holder the segment could be an argument
+				// if there is a placeholder the segment is an argument
 				if ($this->isPlaceholder($segment)) {
 					$arguments[] = $requestSegments[$count];
 					$count++;	
@@ -116,16 +122,19 @@ class Router
 				continue 2;
 			}
 
+			// get the class name of the current route
 			$className = $route->getClass();
 			$method = new \ReflectionMethod($className, $route->getFunction());
-			
+
 			if (count($arguments) !== $method->getNumberOfParameters()) {
 				throw new \Exception('Function '.$route->getFunction().' expects '.$method->getNumberOfParameters().' arguments. '.count($arguments).' arguments given.');
 			}
 
+			// call the method
 			return call_user_func_array(array((new $className), $route->getFunction()), $arguments);
 		}
 
+		// throw an Exception
 		throw new \Exception('404 Route not found');
 	}
 

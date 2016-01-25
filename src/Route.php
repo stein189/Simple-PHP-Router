@@ -3,16 +3,6 @@
 namespace Szenis;
 
 /**
- * V0.1 SimpleRouting
- *
- * @todo namespace
- * @todo aditional parameters
- * @todo find class in the resolver
- * 
- * @author Szenis <stein96@live.nl>
- */
-
-/**
  * Simple route object
  */
 class Route
