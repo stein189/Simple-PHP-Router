@@ -3,6 +3,7 @@
    "description": "A small PHP router",
    "keywords": ["router", "routing"],
    "license": "MIT",
+   "version": "0.1",
    "authors": [
       {
          "name": "Stein Janssen",
