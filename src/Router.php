@@ -25,35 +25,35 @@ class Router
 	{	
 		// if the method is not set throw an exception
 		if (!isset($arguments['method'])) {
-			throw new Exception('Request method argument is missing for route: '.$url);
+			throw new \Exception('Request method argument is missing for route: '.$url);
 		}
 
 		if (!is_array($arguments['method'])) {
-			throw new Exception('Request method should be an array for route: '.$url);
+			throw new \Exception('Request method should be an array for route: '.$url);
 		}
 		
 		// if no valid url is given throw an exception
 		if ($url === null || $url === '') {
-			throw new Exception('No url provided, for root use /');
+			throw new \Exception('No url provided, for root use /');
 		}
 		
 		// if the class name is not provided throw exception
 		if (!isset($arguments['class'])) {
-			throw new Exception('Class argument is missing');
+			throw new \Exception('Class argument is missing');
 		}
 
 		if (!isset($arguments['function'])) {
-			throw new Exception('Function argument is missing');
+			throw new \Exception('Function argument is missing');
 		}
 		
 		if (!class_exists($arguments['class'])) {
-			throw new Exception('Class '.$arguments['class'].' not found!');
+			throw new \Exception('Class '.$arguments['class'].' not found!');
 		}
 		
 		$classMethods = get_class_methods($arguments['class']);
 		
 		if (!in_array($arguments['function'], $classMethods)) {
-			throw new Exception('Function '.$arguments['function'].' does not exists in class '.$arguments['class']);
+			throw new \Exception('Function '.$arguments['function'].' does not exists in class '.$arguments['class']);
 		}
 
 		// create new route object
@@ -117,16 +117,16 @@ class Router
 			}
 
 			$className = $route->getClass();
-			$method = new ReflectionMethod($className, $route->getFunction());
+			$method = new \ReflectionMethod($className, $route->getFunction());
 			
 			if (count($arguments) !== $method->getNumberOfParameters()) {
-				throw new Exception('Function '.$route->getFunction().' expects '.$method->getNumberOfParameters().' arguments. '.count($arguments).' arguments given.');
+				throw new \Exception('Function '.$route->getFunction().' expects '.$method->getNumberOfParameters().' arguments. '.count($arguments).' arguments given.');
 			}
 
 			return call_user_func_array(array((new $className), $route->getFunction()), $arguments);
 		}
 
-		throw new Exception('404 Route not found');
+		throw new \Exception('404 Route not found');
 	}
 
 	/**
