@@ -93,6 +93,22 @@ $resolver->resolve([
 ]);
 ````
 
+<b>When a route is not found an RouteNotFoundException will be thrown</b>
+<p>Its posible to catch this exception and display a good looking 404 page, the try catch block will look something like this</p>
+
+````
+try {
+    // You have to resolve the route inside the try block
+    $resolver->resolve([
+        'uri' => $_SERVER['REQUEST_URI'],
+        'method' => $_SERVER['REQUEST_METHOD'],
+    ]);
+} catch (Szenis\Exceptions\RouteNotFoundException $e) {
+    // route not found, add a nice 404 page here if you like 
+    die($e->getMessage());
+}
+````
+
 Note: Router->resolve() is deprecated use RouteResolver->resolve() instead
 
 Click <a href="https://github.com/stein189/SimpleRoutingExample/tree/master">here</a> to see the working example.
