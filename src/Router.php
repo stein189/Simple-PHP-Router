@@ -95,7 +95,7 @@ class Router
 	{
 		trigger_error(__FUNCTION__.' is deprecated since version 0.1.0 and will be remove in version 1.0.0, use the function resolve in the RouteResolver class.', E_USER_DEPRECATED);
 
-		$resolver = new Szenis\RouteResolver();
+		$resolver = new \Szenis\RouteResolver();
 		return $resolver->resolve($request);
 	}
 }
