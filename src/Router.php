@@ -73,79 +73,29 @@ class Router
 	}
 
 	/**
+	 * Get all routes
+	 *
+	 * @return array
+	 */
+	public function getAll()
+	{
+		return $this->routes;
+	}
+
+	/**
 	 * Resolve the given url and call the function that belongs to the route
 	 *
+	 * @deprecated since v0.1.0 - function moved to RouterResolver class
+	 * 
 	 * @param  array $request
 	 *
 	 * @return mixed
 	 */
 	public function resolve($request)
 	{
-		foreach ($this->routes as $route) {
-			// remove trailing and leading /
-			$requestSegments = trim(strtolower($request['uri']), "/");
-			// make an array of all segments
-			$requestSegments = explode('/', $requestSegments, PHP_URL_PATH);
-			// count segments
-			$uriSegmentCount = count($requestSegments);
+		trigger_error(__FUNCTION__.' is deprecated since version 0.1.0 and will be remove in version 1.0.0, use the function resolve in the RouteResolver class.', E_USER_DEPRECATED);
 
-			// check if the route matches the requested method
-			if (!in_array($request['method'], $route->getMethod())) continue;
-
-			// check if the requested uri has the same amount of segments as the provided uri's
-			if ($route->getSegmentCount() !== $uriSegmentCount) continue;
-
-			// get all route segments
-			$routeSegments = $route->getSegments();
-
-			$count = 0;
-			$found = true;
-			$arguments = [];
-
-			// loop over the segments and check if the given segments fit the route
-			foreach ($routeSegments as $segment) {
-				// if the segments are exact the same
-				if ($segment === $requestSegments[$count]) {
-					$count++;
-
-					continue;
-				}
-
-				// if there is a placeholder the segment is an argument
-				if ($this->isPlaceholder($segment)) {
-					$arguments[] = $requestSegments[$count];
-					$count++;	
-
-					continue;
-				}
-
-				continue 2;
-			}
-
-			// get the class name of the current route
-			$className = $route->getClass();
-			$method = new \ReflectionMethod($className, $route->getFunction());
-
-			if (count($arguments) !== $method->getNumberOfParameters()) {
-				throw new \Exception('Function '.$route->getFunction().' expects '.$method->getNumberOfParameters().' arguments. '.count($arguments).' arguments given.');
-			}
-
-			// call the method
-			return call_user_func_array(array((new $className), $route->getFunction()), $arguments);
-		}
-
-		// throw an Exception
-		throw new \Exception('404 Route not found');
-	}
-
-	/**
-	 * Check if an url segment is an placeholder
-	 *
-	 * @param  string $segment
-	 *
-	 * @return boolean
-	 */
-	private function isPlaceholder($segment) {
-		return (substr($segment, 0, strlen('{')) === '{' && substr($segment, strlen($segment)-1) === '}');
+		$resolver = new Szenis\RouteResolver();
+		return $resolver->resolve($request);
 	}
 }
