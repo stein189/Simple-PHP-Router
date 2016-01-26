@@ -93,7 +93,7 @@ class RouteResolver
 		}
 
 		// throw an RouteNotFoundException
-		throw new RouteNotFoundException($request['mehtod'].' '.$request['uri'].' not found');
+		throw new RouteNotFoundException($request['method'].' '.$request['uri'].' not found');
 	}
 
 	/**
