@@ -2,7 +2,7 @@
 
 namespace Szenis;
 
-use Szenis\Exception\RouteNotFoundException;
+use Szenis\Exceptions\RouteNotFoundException;
 use Szenis\Router;
 
 /**
