@@ -36,74 +36,34 @@ class RouteResolver
 	 */
 	public function resolve($request)
 	{
-		// get all register routes
-		$routes = $this->router->getAll();
+		// get all register routes with the same request method
+		$routes = $this->router->getAllByMethod($request['method']);
+		// remove trailing and leading slash
+		$requestedUri = trim($request['uri'], '/');
+		// get all segments of the requested uri in an array
+		$requestedUriSegments = explode('/', $requestedUri, PHP_URL_PATH);
+		// arguments that will be passed on to the method that will be called
+		$arguments = [];
 
+		// loop trough the posible routes
 		foreach ($routes as $route) {
-			// remove trailing and leading /
-			$requestSegments = trim(strtolower($request['uri']), "/");
-			// make an array of all segments
-			$requestSegments = explode('/', $requestSegments, PHP_URL_PATH);
-			// count segments
-			$uriSegmentCount = count($requestSegments);
+			// if the requested route matches one of the defined routes
+			if ($route->getUrl() === $requestedUri || preg_match('~^'.$route->getUrl().'$~', $requestedUri, $matches)) {
+				// get the class name of the defined route
+				$className = $route->getClass();
 
-			// check if the route matches the requested method
-			if (!in_array($request['method'], $route->getMethod())) continue;
-
-			// check if the requested uri has the same amount of segments as the provided uri's
-			if ($route->getSegmentCount() !== $uriSegmentCount) continue;
-
-			// get all route segments
-			$routeSegments = $route->getSegments();
-
-			$count = 0;
-			$found = true;
-			$arguments = [];
-
-			// loop over the segments and check if the given segments fit the route
-			foreach ($routeSegments as $segment) {
-				// if the segments are exact the same
-				if ($segment === $requestSegments[$count]) {
-					$count++;
-
-					continue;
+				// get the indexes of the arguments - for more information check the private variable argumentIndexes in the route class
+				foreach ($route->getArgumentIndexes() as $index) {
+					// add all the arguments to the argument array
+					$arguments[] = $requestedUriSegments[$index];
 				}
 
-				// if there is a placeholder the segment is an argument
-				if ($this->isPlaceholder($segment)) {
-					$arguments[] = $requestSegments[$count];
-					$count++;	
-
-					continue;
-				}
-
-				continue 2;
+				// call the requested method and give it the arguments (if any)
+				return call_user_func_array(array((new $className), $route->getFunction()), $arguments);
 			}
-
-			// get the class name of the current route
-			$className = $route->getClass();
-			$method = new \ReflectionMethod($className, $route->getFunction());
-
-			if (count($arguments) !== $method->getNumberOfParameters()) {
-				throw new \Exception('Function '.$route->getFunction().' expects '.$method->getNumberOfParameters().' arguments. '.count($arguments).' arguments given.');
-			}
-
-			// call the method
-			return call_user_func_array(array((new $className), $route->getFunction()), $arguments);
 		}
 
-		// throw an RouteNotFoundException
+		// if no route is found throw an RouteNotFoundException
 		throw new RouteNotFoundException($request['method'].' '.$request['uri'].' not found');
-	}
-
-	/**
-	 * Check if an url segment is an placeholder
-	 *
-	 * @param  string $segment
-	 *
-	 * @return boolean
-	 */
-	private function isPlaceholder($segment) {
-		return (substr($segment, 0, strlen('{')) === '{' && substr($segment, strlen($segment)-1) === '}');
 	}
 }

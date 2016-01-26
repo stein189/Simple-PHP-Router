@@ -36,26 +36,20 @@ class Route
 	private $function;
 
 	/**
-	 * Array with all segments of the url
+	 * Contains the index number of the url arguments
 	 *
 	 * @var array
 	 */
-	private $segments;
+	private $argumentIndexes;
 	
 	/**
-	 * Route constructor
+	 * Get the request method of the current route
 	 *
-	 * @param string $url
+	 * @return string
 	 */
-	public function __construct($url)
+	public function getMethod()
 	{
-		$this->url = $url;
-		
-		// remove trailing and leading /
-		$requestSegments = trim($url, "/");
-
-		// make an array of all segments
-		$this->segments = explode('/', $requestSegments, PHP_URL_PATH);
+		return $this->method;
 	}
 
 	/**
@@ -67,16 +61,6 @@ class Route
 	{
 		$this->method = $method;
 	}
-
-	/**
-	 * Get the request method of the current route
-	 *
-	 * @return string
-	 */
-	public function getMethod()
-	{
-		return $this->method;
-	}
 	
 	/**
 	 * Get the url of the current route
@@ -87,15 +71,15 @@ class Route
 	{
 		return $this->url;
 	}
-	
+
 	/**
-	 * Set the class name of the current route
+	 * Set url
 	 *
-	 * @param string $class
+	 * @param string $url
 	 */
-	public function setClass($class)
+	public function setUrl($url)
 	{
-		$this->class = $class;
+		$this->url = $url;
 	}
 	
 	/**
@@ -109,15 +93,15 @@ class Route
 	}
 	
 	/**
-	 * Set the function name of the route
+	 * Set the class name of the current route
 	 *
-	 * @param string $function
+	 * @param string $class
 	 */
-	public function setFunction($function)
+	public function setClass($class)
 	{
-		$this->function = $function;
+		$this->class = $class;
 	}
-	
+
 	/**
 	 * Get the function name of the route
 	 *
@@ -129,22 +113,32 @@ class Route
 	}
 
 	/**
-	 * Get segments of current url
+	 * Set the function name of the route
+	 *
+	 * @param string $function
+	 */
+	public function setFunction($function)
+	{
+		$this->function = $function;
+	}
+
+	/**
+	 * Get argument indexes
 	 *
 	 * @return array
 	 */
-	public function getSegments()
+	public function getArgumentIndexes()
 	{
-		return $this->segments;
+		return $this->argumentIndexes;
 	}
-	
+
 	/**
-	 * Count the amount of segments in the url
+	 * Set argument indexes
 	 *
-	 * @return int
+	 * @param array $indexes
 	 */
-	public function getSegmentCount()
+	public function setArgumentIndexes($indexes)
 	{
-		return count($this->segments);
+		$this->argumentIndexes = $indexes;
 	}
 }

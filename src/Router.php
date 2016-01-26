@@ -2,6 +2,8 @@
 
 namespace Szenis;
 
+use Szenis\Parsers\UrlParser;
+use Szenis\Validators\ArgumentsValidator;
 use Szenis\Route;
 
 /**
@@ -17,6 +19,13 @@ class Router
 	private $routes;
 
 	/**
+	 * An array with routes, request method as key.
+	 * 
+	 * @var array
+	 */
+	private $routesByMethod;
+
+	/**
 	 * Add new route to routes array
 	 *
 	 * @param  string $url
@@ -24,52 +33,48 @@ class Router
 	 */
 	public function add($url, $arguments)
 	{	
-		// if the method is not set throw an exception
-		if (!isset($arguments['method'])) {
-			throw new \Exception('Request method argument is missing for route: '.$url);
-		}
+		$validator = new ArgumentsValidator();
+		$validator->validateUrl($url);
+		$validator->validateArguments($arguments);
 
-		// if the method arguments is not an array throw an exception
-		if (!is_array($arguments['method'])) {
-			throw new \Exception('Request method should be an array for route: '.$url);
-		}
-		
-		// if no valid url is given throw an exception
-		if ($url === null || $url === '') {
-			throw new \Exception('No url provided, for root use /');
-		}
-		
-		// if the class name is not provided throw exception
-		if (!isset($arguments['class'])) {
-			throw new \Exception('Class argument is missing');
-		}
+		// initialize the url parser
+		$urlParser = new UrlParser();
+		// parse the url to a regex url
+		$regexUrl = $urlParser->getRegexUrl(strtolower($url));
+		// get the index numbers of the arguments
+		$argumentIndexes = $urlParser->getArgumentIndexes($url);
 
-		// if the function argument is not provided throw an exception
-		if (!isset($arguments['function'])) {
-			throw new \Exception('Function argument is missing');
-		}
-		
-		// if the class argument is not provided throw an exception
-		if (!class_exists($arguments['class'])) {
-			throw new \Exception('Class '.$arguments['class'].' not found!');
-		}
-		
-		// get all the methods from the given class
-		$classMethods = get_class_methods($arguments['class']);
-		
-		// check if the given method exists in class, if not throw exception
-		if (!in_array($arguments['function'], $classMethods)) {
-			throw new \Exception('Function '.$arguments['function'].' does not exists in class '.$arguments['class']);
-		}
-
-		// create new route object
-		$route = new Route(strtolower($url));
-
+		// create new route object and fill it
+		$route = new Route();
+		$route->setUrl($regexUrl);
+		$route->setArgumentIndexes($argumentIndexes);
 		$route->setMethod($arguments['method']);
 		$route->setClass($arguments['class']);
 		$route->setFunction($arguments['function']);
 
+		// add route to the routes array
 		$this->routes[] = $route;
+
+		// in case of multiple methods the route will be added multiple times
+		foreach ($arguments['method'] as $method) {
+			$this->routesByMethod[$method][] = $route;
+		}
+	}
+
+	/**
+	 * Get all routes with matching method
+	 *
+	 * @param  string $method
+	 *
+	 * @return array
+	 */
+	public function getAllByMethod($method)
+	{
+		if ($this->routesByMethod && isset($this->routesByMethod[$method])) {
+			return $this->routesByMethod[$method];
+		}
+
+		return [];
 	}
 
 	/**
