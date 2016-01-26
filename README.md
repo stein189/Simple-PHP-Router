@@ -34,7 +34,12 @@ Create the file index.php in the root of your project
 Require vendor/autoload.php in your index.php
 
 <b>Step 5 - use Router</b><br/>
-Add ``use Szenis\Router;`` to your index.php
+Add 
+````
+use Szenis\Router;
+use Szenis\RouteResolver;
+````
+to your index.php
 
 <b>Step 6 *optional</b><br/>
 For debuging purpose add the following to your index.php
@@ -72,6 +77,8 @@ $router->add('/user/{id}', [
 	'function' => 'show',
 ]);
 
+$resolver = new RouteResolver($router);
+
 /**
  * resolve the route
  * the resolve function will search for an matching route
@@ -80,10 +87,28 @@ $router->add('/user/{id}', [
  * the function `show` from the class `UserController` will be called
  * the wildcard which is the number `10` will be passed on to the `show` function
  */
-$router->resolve([
+$resolver->resolve([
 	'uri' => $_SERVER['REQUEST_URI'],
 	'method' => $_SERVER['REQUEST_METHOD'],
 ]);
 ````
+
+<b>When a route is not found an RouteNotFoundException will be thrown</b>
+<p>Its posible to catch this exception and display a good looking 404 page, the try catch block will look something like this</p>
+
+````
+try {
+    // You have to resolve the route inside the try block
+    $resolver->resolve([
+        'uri' => $_SERVER['REQUEST_URI'],
+        'method' => $_SERVER['REQUEST_METHOD'],
+    ]);
+} catch (Szenis\Exceptions\RouteNotFoundException $e) {
+    // route not found, add a nice 404 page here if you like 
+    die($e->getMessage());
+}
+````
+
+Note: Router->resolve() is deprecated use RouteResolver->resolve() instead
 
 Click <a href="https://github.com/stein189/SimpleRoutingExample/tree/master">here</a> to see the working example.
