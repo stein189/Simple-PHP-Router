@@ -110,7 +110,7 @@ try {
 ````
 
 <h2>Placeholder requirements</h2>
-<p>Since version 0.3.0 is posible to add requirements to a placeholder<br/>
+<p>It is posible to add requirements to a placeholder since version 0.3.0<br/>
 The following requirements exist
 <ul>
     <li>a: (alfabetic chars only)</li>
