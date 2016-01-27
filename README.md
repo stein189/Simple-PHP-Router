@@ -109,6 +109,46 @@ try {
 }
 ````
 
-Note: Router->resolve() is deprecated use RouteResolver->resolve() instead
+<h2>Placeholder requirements</h2>
+<p>It is posible to add requirements to a placeholder since version 0.3.0<br/>
+The following requirements exist
+<ul>
+    <li>a: (alfabetic chars only)</li>
+    <li>n: (numbers only)</li>
+    <li>an: (alfanumeric chars only)</li>
+    <li>w: (alfanumeric, dash and underscore only)</li>
+</ul>
+
+<b>How to use</b>
+</p>
+
+````
+// in this case the id should be a number
+$router->add('/user/{n:id}', [
+    'method' => ['GET'],
+    'class' => 'App\Controllers\UserController',
+    'function' => 'show',
+]);
+
+// in this case the id should only contain alfabetic chars or numbers (or both)
+$router->add('/user/{an:id}', [
+    'method' => ['GET'],
+    'class' => 'App\Controllers\UserController',
+    'function' => 'show',
+]); 
+````
+
+<h2>Changelog</h2>
+
+<b>v0.3.0</b>
+<p>
+- Its now posible to add requirement to url placeholders for more information see `placeholder requirements`
+</p>
+
+<b>v0.2.0</b>
+<p>
+- Router->resolve() is deprecated use RouteResolver->resolve() instead<br/>
+- RouteResolver uses regex to match routes quicker
+</p>
 
 Click <a href="https://github.com/stein189/SimpleRoutingExample/tree/master">here</a> to see the working example.
