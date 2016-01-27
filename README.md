@@ -119,7 +119,9 @@ The following requirements exist
     <li>w: (alfanumeric, dash and underscore only)</li>
 </ul>
 
-<b>How to use</b><br/>
+<b>How to use</b>
+</p>
+
 ````
 // in this case the id should be a number
 $router->add('/user/{n:id}', [
@@ -135,8 +137,6 @@ $router->add('/user/{an:id}', [
     'function' => 'show',
 ]); 
 ````
-</p>
-
 
 <h2>Changelog</h2>
 
