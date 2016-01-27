@@ -4,6 +4,13 @@ namespace Szenis\Parsers;
 
 class UrlParser
 {
+	private $urlRequirements = [
+		'n:' => '[0-9]++',			// numeric - only numbers
+		'a:' => '[a-zA-Z]++',		// alphabetic - only alphabetic chars
+		'an:' => '[0-9a-zA-Z]++',	// alphanumeric - match alphabetic and numeric chars
+		'w:' => '[0-9a-zA-Z-_]++'	// word - matches alphanumeric, underscore and dash
+	];
+
 	/**
 	 * Transform the url to a regex url
 	 *
@@ -24,8 +31,8 @@ class UrlParser
 		foreach ($requestSegments as $segment) {
 			// if the segment is an placeholder
 			if ($this->isPlaceholder($segment)) {
-				// match anything till the next slash
-				$segment = '[^\/]+';
+				// get regex for the placeholder 
+				$segment = $this->getRegexBySegmentRequirement($segment);
 			}
 
 			// add the new segment to the url + a slash
@@ -64,6 +71,36 @@ class UrlParser
 		}
 
 		return $arguments;
+	}
+
+	/**
+	 * Check if the given placeholder has an unique requirement and return the regular expression
+	 * For example numbers only returns [0-9]+ if no special requirement is given return default regex
+	 *
+	 * @param  string $segment
+	 *
+	 * @return string 
+	 */
+	private function getRegexBySegmentRequirement($segment)
+	{
+		// loop trough all the defined requirements
+		foreach ($this->urlRequirements as $identifier => $regex) {
+			$identifierLength = strlen($identifier);
+
+			// if the length of the identiefier + the bracket is larger or equals to the length of the segment
+			if ($identifierLength + 1 >= strlen($segment)) {
+				continue;
+			}
+
+			// if the current requirement matches the begining of the segment
+			if (substr($segment, 1, $identifierLength) === $identifier) {
+				// return the special regex
+				return $regex;
+			}
+		}
+
+		// match anything till the next slash
+		return '[^\/]++';
 	}
 
 	/**
