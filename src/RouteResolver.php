@@ -12,7 +12,7 @@
 namespace Szenis;
 
 use Szenis\Exceptions\RouteNotFoundException;
-use Szenis\Router;
+use Szenis\Interfaces\RouterInterface;
 
 /**
  * Class resolves the given route or throws an exception
@@ -31,7 +31,7 @@ class RouteResolver
 	 *
 	 * @param Router $router
 	 */
-	public function __construct(Router $router)
+	public function __construct(RouterInterface $router)
 	{
 		$this->router = $router;
 	}
@@ -46,7 +46,7 @@ class RouteResolver
 	public function resolve($request)
 	{
 		// get all register routes with the same request method
-		$routes = $this->router->getAllByMethod($request['method']);
+		$routes = $this->router->get()->getByMethod($request['method']);
 		// remove trailing and leading slash
 		$requestedUri = trim($request['uri'], '/');
 		// get all segments of the requested uri in an array
