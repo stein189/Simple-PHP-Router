@@ -139,6 +139,8 @@ $router->add('/user/{an:id}', [
 ````
 
 <h2>Changelog</h2>
+<b>v0.4.0</b>
+- Added interfaces and created an url factory
 
 <b>v0.3.0</b>
 <p>
