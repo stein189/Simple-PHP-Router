@@ -43,7 +43,7 @@ class RouteFactory implements RouteFactoryInterface
 	 *
 	 * @return RouteInterface
 	 */
-	public function create(RouteInterface $route, $url, arguments)
+	public function create(RouteInterface $route, $url, $arguments)
 	{
 		$this->validator->validateUrl($url);
 		$this->validator->validateArguments($arguments);

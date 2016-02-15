@@ -10,12 +10,12 @@
  */
 namespace Szenis\Validators;
 
-use Szenis\Interfaces\ArgumentsValidatorInterface;
+use Szenis\Interfaces\ValidatorInterface;
 
 /**
  * ArgumentsValidator
  */
-class ArgumentsValidator implements ArgumentsValidatorInterface
+class ArgumentsValidator implements ValidatorInterface
 {
 	/**
 	 * Validate the given url
