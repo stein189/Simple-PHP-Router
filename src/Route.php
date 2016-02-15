@@ -8,13 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- 
 namespace Szenis;
+
+use Szenis\Interfaces\RouteInterface;
 
 /**
  * Simple route object
  */
-class Route
+class Route implements RouteInterface
 {
 	/**
 	 * Method of route
@@ -54,7 +55,7 @@ class Route
 	/**
 	 * Get the request method of the current route
 	 *
-	 * @return string
+	 * @return array
 	 */
 	public function getMethod()
 	{
@@ -64,9 +65,9 @@ class Route
 	/**
 	 * Set the method of the current route
 	 *
-	 * @param string $method
+	 * @param array $method
 	 */
-	public function setMethod($method)
+	public function setMethod(array $method)
 	{
 		$this->method = $method;
 	}
@@ -146,7 +147,7 @@ class Route
 	 *
 	 * @param array $indexes
 	 */
-	public function setArgumentIndexes($indexes)
+	public function setArgumentIndexes(array $indexes)
 	{
 		$this->argumentIndexes = $indexes;
 	}

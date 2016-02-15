@@ -8,13 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- 
 namespace Szenis\Parsers;
+
+use Szenis\Interfaces\UrlParserInterface;
 
 /**
  * Url parser 
  */
-class UrlParser
+class UrlParser implements UrlParserInterface
 {
 	private $urlRequirements = [
 		'n:' => '[0-9]++',			// numeric - only numbers
@@ -30,7 +31,7 @@ class UrlParser
 	 *
 	 * @return string
 	 */
-	public function getRegexUrl($url)
+	public function parse($url)
 	{
 		// remove trailing and leading slash
 		$requestSegments = trim(strtolower($url), '/');

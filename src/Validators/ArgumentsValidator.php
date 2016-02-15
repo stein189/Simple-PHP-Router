@@ -8,13 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
- 
 namespace Szenis\Validators;
+
+use Szenis\Interfaces\ArgumentsValidatorInterface;
 
 /**
  * ArgumentsValidator
  */
-class ArgumentsValidator
+class ArgumentsValidator implements ArgumentsValidatorInterface
 {
 	/**
 	 * Validate the given url
