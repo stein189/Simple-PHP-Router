@@ -13,28 +13,43 @@ namespace Szenis;
 use Szenis\Interfaces\RouterInterface;
 use Szenis\Validators\ArgumentsValidator;
 use Szenis\Parsers\UrlParser;
-use Szenis\RouteCollection;
 use Szenis\RouteFactory;
 use Szenis\Route;
 
 /**
  * Simple routing collection class
+ *
+ * @implements RouterInterface
  */
 class Router implements RouterInterface
 {
 	/**
+	 * Route factory
+	 *
+	 * @var RouteFactory
+	 */
+	private $factory;
+
+	/**
 	 * An array with all the registerd routes
 	 *
-	 * @var RouteCollection
+	 * @var array
 	 */
 	private $routes;
+
+	/**
+	 * an array with all routes by method
+	 *
+	 * @var array
+	 */
+	private $routesByMethod;
 
 	/**
 	 * Router constructor
 	 */
 	public function __construct()
 	{
-		$this->routes = new RouteCollection();
+		$this->factory = new RouteFactory((new ArgumentsValidator()), (new UrlParser()));
 	}
 
 	/**
@@ -45,9 +60,13 @@ class Router implements RouterInterface
 	 */
 	public function add($url, $arguments)
 	{	
-		$factory = new RouteFactory((new ArgumentsValidator()), (new UrlParser()));
+		$route = $factory->create((new Route()), $url, $arguments));
+	
+		$this->routes[] = $route;
 
-		$this->routes->add($factory->create((new Route()), $url, $arguments));
+		foreach ($route->getMethod() as $method) {
+			$this->routesByMethod[$method][] = $route;
+		}
 	}
 
 	/**
@@ -55,8 +74,24 @@ class Router implements RouterInterface
 	 *
 	 * @return RouteCollection
 	 */
-	public function get()
+	public function getAll()
 	{
 		return $this->routes;
+	}
+
+	/**
+	 * Get routes by method
+	 *
+	 * @param  string $method
+	 *
+	 * @return array
+	 */
+	public function getByMethod($method)
+	{
+		if ($this->routesByMethod && isset($this->routesByMethod[$method])) {
+			return $this->routesByMethod[$method];
+		}
+
+		return [];
 	}
 }

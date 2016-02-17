@@ -24,9 +24,18 @@ interface RouterInterface
 	public function add($url, $arguments);
 
 	/**
-	 * Get route collection
+	 * Get all routes
 	 *
-	 * @return RouteCollectionInterface
+	 * @return array
 	 */
-	public function get();
+	public function getAll();
+
+	/**
+	 * Get routes by method
+	 *
+	 * @param  string $method
+	 *
+	 * @return array
+	 */
+	public function getByMethod($method);
 }
