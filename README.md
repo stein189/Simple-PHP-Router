@@ -106,6 +106,10 @@ try {
 } catch (Szenis\Exceptions\RouteNotFoundException $e) {
     // route not found, add a nice 404 page here if you like 
     die($e->getMessage());
+} catch (Szenis\Exceptions\InvalidArgumentException $e) {
+    // when an arguments of a route is missing an InvalidArgumentException will be thrown 
+    // it is not necessary to catch this exception as this exception should never occur in production
+    die($e->getMessage());
 }
 ````
 
