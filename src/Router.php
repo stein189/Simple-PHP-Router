@@ -60,7 +60,7 @@ class Router implements RouterInterface
 	 */
 	public function add($url, $arguments)
 	{	
-		$route = $factory->create((new Route()), $url, $arguments));
+		$route = $this->factory->create((new Route()), $url, $arguments));
 	
 		$this->routes[] = $route;
 
