@@ -35,7 +35,7 @@ Require vendor/autoload.php in your index.php
 
 <b>Step 5 - use Router</b><br/>
 Add 
-````
+```php
 use Szenis\Router;
 use Szenis\RouteResolver;
 ````
@@ -43,14 +43,14 @@ to your index.php
 
 <b>Step 6 *optional</b><br/>
 For debuging purpose add the following to your index.php
-````
+```php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ````
 
 <h2>Usage</h2>
 For the sake of simplicity consider this code to be inside index.php
-````
+```php
 /**
  * initialize the router class
  */
@@ -96,7 +96,7 @@ $resolver->resolve([
 <b>When a route is not found an RouteNotFoundException will be thrown</b>
 <p>Its posible to catch this exception and display a good looking 404 page, the try catch block will look something like this</p>
 
-````
+```php
 try {
     // You have to resolve the route inside the try block
     $resolver->resolve([
@@ -126,7 +126,7 @@ The following requirements exist
 <b>How to use</b>
 </p>
 
-````
+```php
 // in this case the id should be a number
 $router->add('/user/{n:id}', [
     'method' => ['GET'],
