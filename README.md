@@ -143,18 +143,17 @@ $router->add('/user/{an:id}', [
 ````
 
 <h2>Changelog</h2>
+<b>v0.5.0</b>
+- Removed unnecessary code
+
 <b>v0.4.0</b>
 - Added interfaces and created an url factory
 
 <b>v0.3.0</b>
-<p>
 - Its now posible to add requirement to url placeholders for more information see `placeholder requirements`
-</p>
 
 <b>v0.2.0</b>
-<p>
-- Router->resolve() is deprecated use RouteResolver->resolve() instead<br/>
 - RouteResolver uses regex to match routes quicker
-</p>
+
 
 Click <a href="https://github.com/stein189/SimpleRoutingExample/tree/master">here</a> to see the working example.
