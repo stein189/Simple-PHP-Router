@@ -50,11 +50,6 @@ class RouteResolver
 		
 		// remove trailing and leading slash
 		$requestedUri = preg_replace('/\?.*/', '', $request['uri']);
-
-		if ($requestedUri !== '/') {
-			$requestedUri = trim($requestedUri, '/');
-		}
-
 		// get all segments of the requested uri in an array
 		$requestedUriSegments = explode('/', $requestedUri, PHP_URL_PATH);
 		// arguments that will be passed on to the method that will be called
