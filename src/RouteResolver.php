@@ -47,8 +47,9 @@ class RouteResolver
 	{
 		// get all register routes with the same request method
 		$routes = $this->router->getByMethod($request['method']);
+		
 		// remove trailing and leading slash
-		$requestedUri = trim($request['uri'], '/');
+		$requestedUri = trim(preg_replace('/\?.*/', '', $request['uri']), '/');
 		// get all segments of the requested uri in an array
 		$requestedUriSegments = explode('/', $requestedUri, PHP_URL_PATH);
 		// arguments that will be passed on to the method that will be called
