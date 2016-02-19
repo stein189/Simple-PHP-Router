@@ -46,8 +46,6 @@ class RouteFactory implements RouteFactoryInterface
 	 */
 	public function create(RouteInterface $route, $url, $method, $action)
 	{
-		$url  = preg_replace('/\?.*/', '', $url);
-
 		$this->validator->validateUrl($url);
 		$this->validator->validateMethod($method);
 		$this->validator->validateAction($action);
