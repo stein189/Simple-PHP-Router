@@ -140,6 +140,7 @@ $router->add('/user/{an:id}', 'GET', 'App\Controllers\UserController::show');
 <b>v0.6.0</b>
 - Changed usages of router check out the ``Usages`` section for more detail
 - Posible to add closure to a route
+- Routes with query string will be found now (bugfix: v0.6.1)
 
 <b>v0.5.0</b>
 - Removed unnecessary code
