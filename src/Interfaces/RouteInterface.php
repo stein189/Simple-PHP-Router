@@ -36,32 +36,18 @@ interface RouteInterface
 	public function setMethod(array $method);
 
 	/**
-	 * Get class name
+	 * Get action
 	 *
-	 * @return string
+	 * @return string|function
 	 */
-	public function getClass();
+	public function getAction();
 
 	/**
-	 * Set class nane
+	 * Set action
 	 *
-	 * @param string $class
+	 * @param string|function
 	 */
-	public function setClass($class);
-
-	/**
-	 * Get function name
-	 * 
-	 * @return string
-	 */
-	public function getFunction();
-
-	/**
-	 * Set function
-	 *
-	 * @param string $function
-	 */
-	public function setFunction($function);
+	public function setAction($action);
 
 	/**
 	 * Get argument indexes

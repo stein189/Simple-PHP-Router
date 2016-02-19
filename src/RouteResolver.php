@@ -58,8 +58,6 @@ class RouteResolver
 		foreach ($routes as $route) {
 			// if the requested route matches one of the defined routes
 			if ($route->getUrl() === $requestedUri || preg_match('~^'.$route->getUrl().'$~', $requestedUri, $matches)) {
-				// get the class name of the defined route
-				$className = $route->getClass();
 
 				// get the indexes of the arguments - for more information check the private variable argumentIndexes in the route class
 				foreach ($route->getArgumentIndexes() as $index) {
@@ -67,8 +65,14 @@ class RouteResolver
 					$arguments[] = $requestedUriSegments[$index];
 				}
 
-				// call the requested method and give it the arguments (if any)
-				return call_user_func_array(array((new $className), $route->getFunction()), $arguments);
+				if (is_object($route->getAction()) && ($route->getAction() instanceof \Closure)) {
+					return call_user_func_array($route->getAction(), $arguments);
+				}
+
+				$className = substr($route->getAction(), 0, strpos($route->getAction(), '::'));
+				$functionName = substr($route->getAction(), strpos($route->getAction(), '::') + 2);
+
+				return call_user_func_array(array((new $className), $functionName), $arguments);
 			}
 		}
 

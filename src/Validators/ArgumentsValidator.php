@@ -19,6 +19,19 @@ use Szenis\Exceptions\InvalidArgumentException;
 class ArgumentsValidator implements ValidatorInterface
 {
 	/**
+	 * Allowed methods
+	 * 
+	 * @var array
+	 */
+	private $allowedMethods = [
+		'GET',
+		'POST',
+		'PUT',
+		'PATCH',
+		'DELETE',
+	];
+
+	/**
 	 * Validate the given url
 	 *
 	 * @param  string $url
@@ -32,43 +45,34 @@ class ArgumentsValidator implements ValidatorInterface
 	}
 
 	/**
-	 * Validate the given arguments
+	 * Validate the given method(s)
 	 *
-	 * @param  array $arguments
+	 * @param  string $method
 	 */
-	public function validateArguments($arguments)
+	public function validateMethod($method)
 	{
-		// if the method is not set throw an exception
-		if (!isset($arguments['method'])) {
-			throw new InvalidArgumentException('Request method argument is missing for route: '.$url);
+		if ($method === null || $method === '') {
+			throw new InvalidArgumentException('No method provided');
 		}
 
-		// if the method arguments is not an array throw an exception
-		if (!is_array($arguments['method'])) {
-			throw new InvalidArgumentException('Request method should be an array for route: '.$url);
-		}		
-		
-		// if the class name is not provided throw exception
-		if (!isset($arguments['class'])) {
-			throw new InvalidArgumentException('Class argument is missing');
-		}
+		$methods = explode('|', $method);
 
-		// if the function argument is not provided throw an exception
-		if (!isset($arguments['function'])) {
-			throw new InvalidArgumentException('Function argument is missing');
+		foreach ($methods as $method) {
+			if (!in_array($method, $this->allowedMethods)) {
+				throw new InvalidArgumentException('Method not allowed. allowed methods: GET, POST, PUT, PATCH, DELETE');
+			}
 		}
-		
-		// if the class argument is not provided throw an exception
-		if (!class_exists($arguments['class'])) {
-			throw new InvalidArgumentException('Class '.$arguments['class'].' not found!');
-		}
-		
-		// get all the methods from the given class
-		$classMethods = get_class_methods($arguments['class']);
-		
-		// check if the given method exists in class, if not throw exception
-		if (!in_array($arguments['function'], $classMethods)) {
-			throw new InvalidArgumentException('Function '.$arguments['function'].' does not exists in class '.$arguments['class']);
+	}
+
+	/**
+	 * Validate action
+	 * 
+	 * @param string|function $action
+	 */
+	public function validateAction($action)
+	{
+		if (!(is_object($action) && ($action instanceof \Closure)) && empty($action)) {
+			throw new InvalidArgumentException('Action should be a Closure or a path to a function');
 		}
 	}
 }

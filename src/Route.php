@@ -32,18 +32,11 @@ class Route implements RouteInterface
 	private $url;
 
 	/**
-	 * Classname that the route will use
+	 * Action that the route will use when called
 	 *
-	 * @var string
+	 * @var string|function
 	 */
-	private $class;
-
-	/**
-	 * Function that the route will execute when triggerd
-	 *
-	 * @var string
-	 */
-	private $function;
+	private $action;
 
 	/**
 	 * Contains the index number of the url arguments
@@ -93,43 +86,23 @@ class Route implements RouteInterface
 	}
 	
 	/**
-	 * Get the class name of the current route
+	 * Get the action of the current route
 	 *
-	 * @return string
+	 * @return string|function
 	 */
-	public function getClass()
+	public function getAction()
 	{
-		return $this->class;
-	}
-	
-	/**
-	 * Set the class name of the current route
-	 *
-	 * @param string $class
-	 */
-	public function setClass($class)
-	{
-		$this->class = $class;
+		return $this->action;
 	}
 
 	/**
-	 * Get the function name of the route
-	 *
-	 * @return string
+	 * Set action 
+	 * 
+	 * @param string|function $action
 	 */
-	public function getFunction()
+	public function setAction($action)
 	{
-		return $this->function;
-	}
-
-	/**
-	 * Set the function name of the route
-	 *
-	 * @param string $function
-	 */
-	public function setFunction($function)
-	{
-		$this->function = $function;
+		$this->action = $action;
 	}
 
 	/**
