@@ -15,13 +15,4 @@ interface ValidatorInterface
 	 * @throws \Exception
 	 */
 	public function validateUrl($url);
-
-	/**
-	 * Validate arguments
-	 *
-	 * @param  array $arguments
-	 *
-	 * @throws \Exception
-	 */
-	public function validateArguments($arguments);
 }

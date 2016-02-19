@@ -12,9 +12,10 @@ interface RouteFactoryInterface
 	 *
 	 * @param  RouterInterface $route
 	 * @param  string          $url
-	 * @param  array           $arguments
+	 * @param  string          $method
+	 * @param  string|function $action
 	 *
 	 * @return RouteInterface
 	 */
-	public function create(RouteInterface $route, $url, $arguments);
+	public function create(RouteInterface $route, $url, $method, $action);
 }

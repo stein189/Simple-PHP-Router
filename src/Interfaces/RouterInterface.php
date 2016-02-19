@@ -18,10 +18,10 @@ interface RouterInterface
 	 * Add a route to the router
 	 *
 	 * @param string $url
-	 *
-	 * @param array  $arguments
+	 * @param string $method
+	 * @param string $action
 	 */
-	public function add($url, $arguments);
+	public function add($url, $method, $action);
 
 	/**
 	 * Get all routes

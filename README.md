@@ -57,25 +57,27 @@ For the sake of simplicity consider this code to be inside index.php
 $router = new Router();
 
 /**
- * add a route to the homepage
- * the first argument is the route that we want to look for
- * the second argument is an array, every key in this array is required.
+ * Add a route to the homepage
+ * The first argument is the route that we want to look for
+ * The second argument are the accepted methods, methods have to be seperated by a |
+ * The third and last argument is the full path to the action that has to be executed,
+ * this could also be an closure
  */
-$router->add('/', [
-	'method' => ['GET', 'PUT'],                   // array of accepted methods, atleast 1.
-	'class' => 'App\Controllers\PageController',  // full namespace to your class
-	'function' => 'index',                        // name of the method inside the class
-]);
+$router->add('/', 'GET|PUT', 'App\Controllers\PageController::index');
 
 /**
- * add a route with a wildcard
- * it is posible to add multiple wildcards in one route
+ * It is posible to add one or multiple wildcards in one route
  */
-$router->add('/user/{id}', [
-	'method' => ['GET'],
-	'class' => 'App\Controllers\UserController',
-	'function' => 'show',
-]);
+$router->add('/user/{id}', 'GET', 'App\Controllers\UserController::show');
+
+/**
+ * Closure route example
+ */
+$router->add('/user/{id}/edit', 'GET|POST', function($id) {
+    echo $id;
+
+    return;
+});
 
 $resolver = new RouteResolver($router);
 
@@ -127,22 +129,18 @@ The following requirements exist
 </p>
 
 ```php
-// in this case the id should be a number
-$router->add('/user/{n:id}', [
-    'method' => ['GET'],
-    'class' => 'App\Controllers\UserController',
-    'function' => 'show',
-]);
+// In this case the id may be a number
+$router->add('/user/{n:id}', 'GET', 'App\Controllers\UserController::show');
 
-// in this case the id should only contain alfabetic chars or numbers (or both)
-$router->add('/user/{an:id}', [
-    'method' => ['GET'],
-    'class' => 'App\Controllers\UserController',
-    'function' => 'show',
-]); 
+// In this case the id may only contain alfabetic chars or numbers (or both)
+$router->add('/user/{an:id}', 'GET', 'App\Controllers\UserController::show'); 
 ````
 
 <h2>Changelog</h2>
+<b>v0.6.0</b>
+- Changed usages of router check out the ``Usages`` section for more detail
+- Posible to add closure to a route
+
 <b>v0.5.0</b>
 - Removed unnecessary code
 

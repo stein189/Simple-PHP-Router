@@ -39,21 +39,34 @@ class RouteFactory implements RouteFactoryInterface
 	 *
 	 * @param  RouteInterface $route
 	 * @param  string         $url
-	 * @param  array          $arguments
+	 * @param  string         $method
+	 * @param  string         $action
 	 *
 	 * @return RouteInterface
 	 */
-	public function create(RouteInterface $route, $url, $arguments)
+	public function create(RouteInterface $route, $url, $method, $action)
 	{
 		$this->validator->validateUrl($url);
-		$this->validator->validateArguments($arguments);
+		$this->validator->validateMethod($method);
+		$this->validator->validateAction($action);
 
 		$route->setUrl($this->parser->parse($url));
-		$route->setMethod($arguments['method']);
-		$route->setClass($arguments['class']);
-		$route->setFunction($arguments['function']);
+		$route->setMethod($this->parseToArray($method));
+		$route->setAction($action);
 		$route->setArgumentIndexes($this->parser->getArgumentIndexes($url));
 
 		return $route;
+	}
+
+	/**
+	 * Create an array from the method(s)
+	 *
+	 * @param  string $method
+	 * 
+	 * @return array
+	 */
+	private function parseToArray($method)
+	{
+		return explode('|', $method);
 	}
 }
