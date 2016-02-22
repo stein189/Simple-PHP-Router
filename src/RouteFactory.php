@@ -3,20 +3,14 @@
 namespace Szenis;
 
 use Szenis\Interfaces\RouteFactoryInterface;
-use Szenis\Interfaces\RouteInterface;
-use Szenis\Interfaces\ValidatorInterface;
 use Szenis\Interfaces\UrlParserInterface;
+use Szenis\Route;
 
 /**
  * Route builder
  */
 class RouteFactory implements RouteFactoryInterface
 {
-	/**
-	 * @var ValidatorInterface
-	 */
-	private $validator;
-
 	/**
 	 * @var UrlParserInterface
 	 */
@@ -28,31 +22,24 @@ class RouteFactory implements RouteFactoryInterface
 	 * @param ValidatorInterface $validator
 	 * @param UrlParserInterface $parser
 	 */
-	public function __construct(ValidatorInterface $validator, UrlParserInterface $parser)
+	public function __construct(UrlParserInterface $parser)
 	{
-		$this->validator = $validator;
 		$this->parser = $parser;
 	}
 
 	/**
 	 * Create new route
 	 *
-	 * @param  RouteInterface $route
 	 * @param  string         $url
 	 * @param  string         $method
 	 * @param  string         $action
 	 *
 	 * @return RouteInterface
 	 */
-	public function create(RouteInterface $route, $url, $method, $action)
+	public function create($url, $method, $action)
 	{
-		$this->validator->validateUrl($url);
-		$this->validator->validateMethod($method);
-		$this->validator->validateAction($action);
+		$route = new Route($this->parser->parse($url), $this->parseToArray($method), $action);
 
-		$route->setUrl($this->parser->parse($url));
-		$route->setMethod($this->parseToArray($method));
-		$route->setAction($action);
 		$route->setArgumentIndexes($this->parser->getArgumentIndexes($url));
 
 		return $route;

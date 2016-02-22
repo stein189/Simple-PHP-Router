@@ -137,6 +137,9 @@ $router->add('/user/{an:id}', 'GET', 'App\Controllers\UserController::show');
 ````
 
 <h2>Changelog</h2>
+<b>b0.7.0</b>
+- Improved code
+
 <b>v0.6.0</b>
 - Changed usages of router check out the ``Usages`` section for more detail
 - Posible to add closure to a route
@@ -153,6 +156,10 @@ $router->add('/user/{an:id}', 'GET', 'App\Controllers\UserController::show');
 
 <b>v0.2.0</b>
 - RouteResolver uses regex to match routes quicker
+
+<h2>Comming soon</h2>
+- Optional parameters
+- Lazy url loading
 
 
 Click <a href="https://github.com/stein189/SimpleRoutingExample/tree/master">here</a> to see the working example.

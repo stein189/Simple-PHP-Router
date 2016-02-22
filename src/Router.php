@@ -11,10 +11,8 @@
 namespace Szenis;
 
 use Szenis\Interfaces\RouterInterface;
-use Szenis\Validators\ArgumentsValidator;
 use Szenis\Parsers\UrlParser;
 use Szenis\RouteFactory;
-use Szenis\Route;
 
 /**
  * Simple routing collection class
@@ -49,7 +47,7 @@ class Router implements RouterInterface
 	 */
 	public function __construct()
 	{
-		$this->factory = new RouteFactory((new ArgumentsValidator()), (new UrlParser()));
+		$this->factory = new RouteFactory((new UrlParser()));
 	}
 
 	/**
@@ -61,7 +59,7 @@ class Router implements RouterInterface
 	 */
 	public function add($url, $method, $action)
 	{	
-		$route = $this->factory->create((new Route()), $url, $method, $action);
+		$route = $this->factory->create($url, $method, $action);
 	
 		$this->routes[] = $route;
 
