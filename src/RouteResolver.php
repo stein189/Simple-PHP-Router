@@ -59,7 +59,6 @@ class RouteResolver
 		foreach ($routes as $route) {
 			// if the requested route matches one of the defined routes
 			if ($route->getUrl() === $requestedUri || preg_match('~^'.$route->getUrl().'$~', $requestedUri, $matches)) {
-
 				// get the indexes of the arguments - for more information check the private variable argumentIndexes in the route class
 				foreach ($route->getArgumentIndexes() as $index) {
 					// add all the arguments to the argument array

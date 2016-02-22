@@ -10,12 +10,12 @@
  */
 namespace Szenis;
 
-use Szenis\Interfaces\RouteInterface;
+use Szenis\Exceptions\InvalidArgumentException;
 
 /**
  * Simple route object
  */
-class Route implements RouteInterface
+class Route
 {
 	/**
 	 * Method of route
@@ -46,6 +46,20 @@ class Route implements RouteInterface
 	private $argumentIndexes;
 	
 	/**
+	 * Route constructor
+	 *
+	 * @param string         $url
+	 * @param array          $method
+	 * @param string|closure $action
+	 */
+	public function __construct($url = null, $method = null, $action = null)
+	{
+		$this->setUrl($url);
+		$this->setMethod($method);
+		$this->setAction($action);
+	}
+
+	/**
 	 * Get the request method of the current route
 	 *
 	 * @return array
@@ -60,8 +74,18 @@ class Route implements RouteInterface
 	 *
 	 * @param array $method
 	 */
-	public function setMethod(array $method)
+	public function setMethod($method)
 	{
+		if (!is_array($method) && !empty($method)) {
+			throw new InvalidArgumentException('No method provided');
+		}
+
+		foreach ($method as $m) {
+			if (!in_array($m, array('GET','POST','PUT','PATCH','DELETE'))) {
+				throw new InvalidArgumentException('Method not allowed. allowed methods: GET, POST, PUT, PATCH, DELETE');
+			}
+		}
+
 		$this->method = $method;
 	}
 	
@@ -82,6 +106,10 @@ class Route implements RouteInterface
 	 */
 	public function setUrl($url)
 	{
+		if ($url === null) {
+			throw new InvalidArgumentException('No url provided, for root use /');
+		}
+
 		$this->url = $url;
 	}
 	
@@ -102,6 +130,10 @@ class Route implements RouteInterface
 	 */
 	public function setAction($action)
 	{
+		if (!(is_object($action) && ($action instanceof \Closure)) && ($action === null || $action === '')) {
+			throw new InvalidArgumentException('Action should be a Closure or a path to a function');
+		}
+
 		$this->action = $action;
 	}
 

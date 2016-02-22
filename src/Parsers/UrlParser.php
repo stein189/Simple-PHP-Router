@@ -21,7 +21,7 @@ class UrlParser implements UrlParserInterface
 		'n:' => '[0-9]++',			// numeric - only numbers
 		'a:' => '[a-zA-Z]++',		// alphabetic - only alphabetic chars
 		'an:' => '[0-9a-zA-Z]++',	// alphanumeric - match alphabetic and numeric chars
-		'w:' => '[0-9a-zA-Z-_]++'	// word - matches alphanumeric, underscore and dash
+		'w:' => '[0-9a-zA-Z-_]++',	// word - matches alphanumeric, underscore and dash
 	];
 
 	/**
@@ -123,7 +123,8 @@ class UrlParser implements UrlParserInterface
 	 *
 	 * @return boolean
 	 */
-	private function isPlaceholder($segment) {
+	private function isPlaceholder($segment)
+	{
 		return (substr($segment, 0, strlen('{')) === '{' && substr($segment, strlen($segment)-1) === '}');
 	}
 }
