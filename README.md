@@ -137,7 +137,7 @@ $router->add('/user/{an:id}', 'GET', 'App\Controllers\UserController::show');
 ````
 
 <h2>Changelog</h2>
-<b>b0.7.0</b>
+<b>v0.7.0</b>
 - Improved code
 
 <b>v0.6.0</b>
