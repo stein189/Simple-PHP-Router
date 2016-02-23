@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Szenis;
 
 use Szenis\Interfaces\RouterInterface;
-use Szenis\Parsers\UrlParser;
 use Szenis\RouteFactory;
 
 /**
@@ -47,7 +47,7 @@ class Router implements RouterInterface
 	 */
 	public function __construct()
 	{
-		$this->factory = new RouteFactory((new UrlParser()));
+		$this->factory = new RouteFactory();
 	}
 
 	/**

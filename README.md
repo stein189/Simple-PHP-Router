@@ -123,6 +123,8 @@ The following requirements exist
     <li>n: (numbers only)</li>
     <li>an: (alfanumeric chars only)</li>
     <li>w: (alfanumeric, dash and underscore only)</li>
+    <li>?: (optional parameters) - must be last part of the url</li>
+    <li>*: (lazy loading) - must be last part of the url</li>
 </ul>
 
 <b>How to use</b>
@@ -133,10 +135,28 @@ The following requirements exist
 $router->add('/user/{n:id}', 'GET', 'App\Controllers\UserController::show');
 
 // In this case the id may only contain alfabetic chars or numbers (or both)
-$router->add('/user/{an:id}', 'GET', 'App\Controllers\UserController::show'); 
+$router->add('/user/{an:id}', 'GET', 'App\Controllers\UserController::show');
+
+// Now we want everything behind docs/ in the page variable
+// For example when we go to the url /docs/user/edit we will receive user/edit in the page variable
+$router->add('/docs/{*:page}', 'GET', function($page) {
+    // do something with $page
+});
+
+// Optional parameter example
+$router->add('/hello/{a:name}/{?:lastname}', 'GET', function($name, $lastname = null) {
+    // check if lastname is provided
+    // if ($lastname) {...}
+})
 ````
 
 <h2>Changelog</h2>
+
+<b>v0.8.0</b>
+- Added optional parameter
+- Added lazy url loading
+- Improved code
+
 <b>v0.7.0</b>
 - Improved code
 
@@ -156,10 +176,6 @@ $router->add('/user/{an:id}', 'GET', 'App\Controllers\UserController::show');
 
 <b>v0.2.0</b>
 - RouteResolver uses regex to match routes quicker
-
-<h2>Comming soon</h2>
-- Optional parameters
-- Lazy url loading
 
 
 Click <a href="https://github.com/stein189/SimpleRoutingExample/tree/master">here</a> to see the working example.

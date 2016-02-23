@@ -1,9 +1,17 @@
 <?php
 
+/*
+ * This file is part of the SimpleRouting package.
+ *
+ * (c) Stein Janssen <birdmage@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Szenis;
 
 use Szenis\Interfaces\RouteFactoryInterface;
-use Szenis\Interfaces\UrlParserInterface;
 use Szenis\Route;
 
 /**
@@ -12,20 +20,36 @@ use Szenis\Route;
 class RouteFactory implements RouteFactoryInterface
 {
 	/**
-	 * @var UrlParserInterface
+	 * Patterns that should be replaced
+	 *
+	 * @var array
 	 */
-	private $parser;
+	private $patterns = [
+		'~/~',			     // slash
+		'~{an:[^\/]+}~',     // placeholder accepts alphabetic and numeric chars
+		'~{n:[^\/]+}~',      // placeholder accepts only numeric
+		'~{a:[^\/]+}~',      // placeholder accepts only alphabetic chars
+		'~{w:[^\/]+}~',      // placeholder accepts alphanumeric and underscore
+		'~{\*:[^\/]+}~',     // placeholder match rest of url
+		'~\\\/{\?:[^\/]+}~', // optional placeholder
+		'~{[^\/]+}~',	     // normal placeholder
+	];
 
 	/**
-	 * Construct the route factory
+	 * Replacements for the patterns index should be in sink
 	 *
-	 * @param ValidatorInterface $validator
-	 * @param UrlParserInterface $parser
+	 * @var array
 	 */
-	public function __construct(UrlParserInterface $parser)
-	{
-		$this->parser = $parser;
-	}
+	private $replacements = [
+		'\/', 			     // slash
+		'([0-9a-zA-Z]++)',   // placeholder accepts alphabetic and numeric chars
+		'([0-9]++)',		 // placeholder accepts only numeric
+		'([a-zA-Z]++)',	     // placeholder accepts only alphabetic chars
+		'([0-9a-zA-Z-_]++)', // placeholder accepts alphanumeric and underscore
+		'(.++)',			 // placeholder match rest of url
+		'\/?([^\/]*)',	     // optional placeholder
+		'([^\/]++)',	 	 // normal placeholder
+	];
 
 	/**
 	 * Create new route
@@ -38,11 +62,23 @@ class RouteFactory implements RouteFactoryInterface
 	 */
 	public function create($url, $method, $action)
 	{
-		$route = new Route($this->parser->parse($url), $this->parseToArray($method), $action);
+		return new Route($this->parseUrl($url), $this->parseMethod($method), $action);
+	}
 
-		$route->setArgumentIndexes($this->parser->getArgumentIndexes($url));
+	/**
+	 * Parse url into a regex url
+	 *
+	 * @param  string $url
+	 *
+	 * @return string
+	 */
+	private function parseUrl($url)
+	{
+		$newUrl = preg_replace($this->patterns, $this->replacements, $url);
 
-		return $route;
+		$newUrl = trim($newUrl, '\/');
+
+		return $newUrl;
 	}
 
 	/**
@@ -52,7 +88,7 @@ class RouteFactory implements RouteFactoryInterface
 	 * 
 	 * @return array
 	 */
-	private function parseToArray($method)
+	private function parseMethod($method)
 	{
 		return explode('|', $method);
 	}
