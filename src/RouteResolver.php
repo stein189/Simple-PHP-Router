@@ -47,23 +47,18 @@ class RouteResolver
 	{
 		// get all register routes with the same request method
 		$routes = $this->router->getByMethod($request['method']);
-		
 		// remove trailing and leading slash
 		$requestedUri = trim(preg_replace('/\?.*/', '', $request['uri']), '/');
 		// get all segments of the requested uri in an array
 		$requestedUriSegments = explode('/', $requestedUri, PHP_URL_PATH);
-		// arguments that will be passed on to the method that will be called
-		$arguments = [];
 
 		// loop trough the posible routes
 		foreach ($routes as $route) {
+			$matches = [];
+
 			// if the requested route matches one of the defined routes
 			if ($route->getUrl() === $requestedUri || preg_match('~^'.$route->getUrl().'$~', $requestedUri, $matches)) {
-				// get the indexes of the arguments - for more information check the private variable argumentIndexes in the route class
-				foreach ($route->getArgumentIndexes() as $index) {
-					// add all the arguments to the argument array
-					$arguments[] = $requestedUriSegments[$index];
-				}
+				$arguments = $this->getArguments($matches);
 
 				if (is_object($route->getAction()) && ($route->getAction() instanceof \Closure)) {
 					return call_user_func_array($route->getAction(), $arguments);
@@ -78,5 +73,27 @@ class RouteResolver
 
 		// if no route is found throw an RouteNotFoundException
 		throw new RouteNotFoundException($request['method'].' '.$request['uri'].' not found');
+	}
+
+	/**
+	 * Get arguments
+	 *
+	 * @param  array $matches
+	 *
+	 * @return array
+	 */
+	private function getArguments($matches)
+	{
+		$arguments = [];
+
+		foreach ($matches as $key => $match) {
+			if ($key === 0) continue;
+
+			if (strlen($match) > 0) {
+				$arguments[] = $match;
+			}
+		}
+
+		return $arguments;
 	}
 }

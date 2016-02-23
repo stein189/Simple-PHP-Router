@@ -8,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Szenis;
 
 use Szenis\Exceptions\InvalidArgumentException;
@@ -38,13 +39,6 @@ class Route
 	 */
 	private $action;
 
-	/**
-	 * Contains the index number of the url arguments
-	 *
-	 * @var array
-	 */
-	private $argumentIndexes;
-	
 	/**
 	 * Route constructor
 	 *
@@ -135,25 +129,5 @@ class Route
 		}
 
 		$this->action = $action;
-	}
-
-	/**
-	 * Get argument indexes
-	 *
-	 * @return array
-	 */
-	public function getArgumentIndexes()
-	{
-		return $this->argumentIndexes;
-	}
-
-	/**
-	 * Set argument indexes
-	 *
-	 * @param array $indexes
-	 */
-	public function setArgumentIndexes(array $indexes)
-	{
-		$this->argumentIndexes = $indexes;
 	}
 }
