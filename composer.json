@@ -1,6 +1,6 @@
 {
    "name": "szenis/routing",
-   "description": "A small PHP router",
+   "description": "A small and simple PHP router",
    "keywords": ["router", "routing"],
    "license": "MIT",
    "authors": [

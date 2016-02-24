@@ -1,4 +1,4 @@
-# SimpleRouting
+# Simple PHP Router
 
 Note: This package is still in development, to use it add "minimum-stability": "dev" to your composer.json.
 
