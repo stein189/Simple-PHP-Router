@@ -171,7 +171,7 @@ $router->add('/hello/{a:name}/{?:lastname}', 'GET', function($name, $lastname = 
 - Added interfaces and created an url factory
 
 <b>v0.3.0</b>
-- Its now posible to add requirement to url placeholders for more information see `placeholder requirements`
+- Its now posible to add options to url wildcards for more information see `wildcard options`
 
 <b>v0.2.0</b>
 - RouteResolver uses regex to match routes quicker
