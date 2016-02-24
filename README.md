@@ -115,9 +115,8 @@ try {
 }
 ````
 
-<h2>Placeholder requirements</h2>
-<p>It is posible to add requirements to a placeholder since version 0.3.0<br/>
-The following requirements exist
+<h2>Wildcard options</h2>
+The following options exist
 <ul>
     <li>a: (alfabetic chars only)</li>
     <li>n: (numbers only)</li>
@@ -177,5 +176,7 @@ $router->add('/hello/{a:name}/{?:lastname}', 'GET', function($name, $lastname = 
 <b>v0.2.0</b>
 - RouteResolver uses regex to match routes quicker
 
+<h2>Comming soon</h2>
+- Stable release (v1)
 
 Click <a href="https://github.com/stein189/SimpleRoutingExample/tree/master">here</a> to see the working example.
