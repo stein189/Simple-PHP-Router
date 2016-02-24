@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the SimpleRouting package.
+ * This file is part of the Simple-PHP-Router package.
  *
  * (c) Stein Janssen <birdmage@gmail.com>
  *
