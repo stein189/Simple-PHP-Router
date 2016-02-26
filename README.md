@@ -151,6 +151,10 @@ $router->add('/hello/{a:name}/{?:lastname}', 'GET', function($name, $lastname = 
 
 <h2>Changelog</h2>
 
+<b>v0.9.0</b>
+- 100% test coverage
+- minimum php version reduced from 5.4 to 5.3
+
 <b>v0.8.0</b>
 - Added optional parameter
 - Added lazy url loading

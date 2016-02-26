@@ -33,14 +33,14 @@ class Router implements RouterInterface
 	 *
 	 * @var array
 	 */
-	private $routes;
+	private $routes = array();
 
 	/**
 	 * an array with all routes by method
 	 *
 	 * @var array
 	 */
-	private $routesByMethod;
+	private $routesByMethod = array();
 
 	/**
 	 * Router constructor
@@ -91,6 +91,6 @@ class Router implements RouterInterface
 			return $this->routesByMethod[$method];
 		}
 
-		return [];
+		return array();
 	}
 }

@@ -24,7 +24,7 @@ class RouteFactory implements RouteFactoryInterface
 	 *
 	 * @var array
 	 */
-	private $patterns = [
+	private $patterns = array(
 		'~/~',			     // slash
 		'~{an:[^\/]+}~',     // placeholder accepts alphabetic and numeric chars
 		'~{n:[^\/]+}~',      // placeholder accepts only numeric
@@ -33,14 +33,14 @@ class RouteFactory implements RouteFactoryInterface
 		'~{\*:[^\/]+}~',     // placeholder match rest of url
 		'~\\\/{\?:[^\/]+}~', // optional placeholder
 		'~{[^\/]+}~',	     // normal placeholder
-	];
+	);
 
 	/**
 	 * Replacements for the patterns index should be in sink
 	 *
 	 * @var array
 	 */
-	private $replacements = [
+	private $replacements = array(
 		'\/', 			     // slash
 		'([0-9a-zA-Z]++)',   // placeholder accepts alphabetic and numeric chars
 		'([0-9]++)',		 // placeholder accepts only numeric
@@ -49,7 +49,7 @@ class RouteFactory implements RouteFactoryInterface
 		'(.++)',			 // placeholder match rest of url
 		'\/?([^\/]*)',	     // optional placeholder
 		'([^\/]++)',	 	 // normal placeholder
-	];
+	);
 
 	/**
 	 * Create new route

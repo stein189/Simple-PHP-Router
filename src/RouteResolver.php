@@ -54,7 +54,7 @@ class RouteResolver
 
 		// loop trough the posible routes
 		foreach ($routes as $route) {
-			$matches = [];
+			$matches = array();
 
 			// if the requested route matches one of the defined routes
 			if ($route->getUrl() === $requestedUri || preg_match('~^'.$route->getUrl().'$~', $requestedUri, $matches)) {
@@ -84,7 +84,7 @@ class RouteResolver
 	 */
 	private function getArguments($matches)
 	{
-		$arguments = [];
+		$arguments = array();
 
 		foreach ($matches as $key => $match) {
 			if ($key === 0) continue;
