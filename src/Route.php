@@ -70,7 +70,7 @@ class Route
 	 */
 	public function setMethod($method)
 	{
-		if (!is_array($method) && !empty($method)) {
+		if ($method === null || !is_array($method) || empty($method)) {
 			throw new InvalidArgumentException('No method provided');
 		}
 
