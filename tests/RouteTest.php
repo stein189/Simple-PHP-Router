@@ -58,7 +58,7 @@ class RouteTest extends BaseTest
 	public function testInvalidArgumentExceptionWithWrongAction()
 	{
 		$this->setExpectedException('\Szenis\Exceptions\InvalidArgumentException');
-		$route = new \Szenis\Route('/', ['GET'], '');
+		$route = new \Szenis\Route('/', array('GET'), '');
 	}
 
 	/**
@@ -66,13 +66,13 @@ class RouteTest extends BaseTest
 	 */
 	public function testSetRouteMethods()
 	{
-		$route = new \Szenis\Route('/', ['GET'], function(){});
+		$route = new \Szenis\Route('/', array('GET'), function(){});
 
-		$route->setMethod(['POST']);
+		$route->setMethod(array('POST'));
 		$route->setUrl('/test');
 		$route->setAction('\App\Controllers\IndexController::index');
 
-		$this->assertEquals($route->getMethod(), ['POST']);
+		$this->assertEquals($route->getMethod(), array('POST'));
 		$this->assertEquals($route->getUrl(), '/test');
 		$this->assertEquals($route->getAction(), '\App\Controllers\IndexController::index');
 	}
