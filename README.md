@@ -1,7 +1,7 @@
 # Simple PHP Router
 
 
-<img src="https://travis-ci.org/stein189/Simple-PHP-Router.svg?branch=master" />
+[![Build Status](https://travis-ci.org/stein189/Simple-PHP-Router.svg?branch=master)](https://travis-ci.org/stein189/Simple-PHP-Router)
 
 Note: This package is still in development, to use it add "minimum-stability": "dev" to your composer.json.
 
