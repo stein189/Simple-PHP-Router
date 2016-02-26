@@ -14,6 +14,9 @@
    "require": {
       "php": ">=5.4.0"
    },
+   "require-dev": {
+      "phpunit/phpunit": "4.1.x"
+   },
    "autoload": {
       "psr-4": {
          "Szenis\\": "src/"
