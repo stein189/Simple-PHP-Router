@@ -64,7 +64,7 @@ class RouteResolver
 					return call_user_func_array($route->getAction(), $arguments);
 				}
 
-				$className = substr($route->getAction(), 0, strpos($route->getAction(), '::'));
+				$className = $route->getNamespace() . substr($route->getAction(), 0, strpos($route->getAction(), '::'));
 				$functionName = substr($route->getAction(), strpos($route->getAction(), '::') + 2);
 
 				return call_user_func_array(array((new $className), $functionName), $arguments);

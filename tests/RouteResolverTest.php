@@ -29,7 +29,7 @@ class RouteResolverTest extends BaseTest
 	public function setUp()
 	{
 		// initialize router
-		$router = new \Szenis\Router(new \Szenis\RouteFactory());
+		$router = new \Szenis\Router('RouterTests\\');
 
 		// add some routes
 		$router->add('/test', 'GET', function(){
@@ -44,7 +44,11 @@ class RouteResolverTest extends BaseTest
 			return $number;
 		});
 
-		$router->add('/call/controller', 'GET', 'RouterTests\TestController::index');
+		$router->add('/call/controller', 'GET', 'TestController::index');
+
+		$router->setNamespace('');
+		
+		$router->add('/call/controller', 'PUT', 'RouterTests\TestController::index');
 
 		// initialize resolver
 		$this->resolver = new \Szenis\RouteResolver($router);
@@ -117,6 +121,21 @@ class RouteResolverTest extends BaseTest
 		$request = array(
 			'uri' => '/call/controller',
 			'method' => 'GET',
+		);
+
+		$response = $this->resolver->resolve($request);
+
+		$this->assertEquals('index called', $response);
+	}
+
+	/**
+	 * Test action after namespace has changed
+	 */
+	public function testNamespace()
+	{
+		$request = array(
+			'uri' => '/call/controller',
+			'method' => 'PUT',
 		);
 
 		$response = $this->resolver->resolve($request);

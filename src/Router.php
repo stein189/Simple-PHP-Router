@@ -29,6 +29,13 @@ class Router implements RouterInterface
 	private $factory;
 
 	/**
+	 * Default namespace
+	 *
+	 * @var string
+	 */
+	private $namespace;
+
+	/**
 	 * An array with all the registerd routes
 	 *
 	 * @var array
@@ -45,9 +52,10 @@ class Router implements RouterInterface
 	/**
 	 * Router constructor
 	 */
-	public function __construct()
+	public function __construct($namespace = '')
 	{
 		$this->factory = new RouteFactory();
+		$this->namespace = $namespace;
 	}
 
 	/**
@@ -60,7 +68,8 @@ class Router implements RouterInterface
 	public function add($url, $method, $action)
 	{	
 		$route = $this->factory->create($url, $method, $action);
-	
+		$route->setNamespace($this->namespace);
+
 		$this->routes[] = $route;
 
 		foreach ($route->getMethod() as $method) {
@@ -92,5 +101,15 @@ class Router implements RouterInterface
 		}
 
 		return array();
+	}
+
+	/**
+	 * Set namespace
+	 *
+	 * @param string $namespace
+	 */
+	public function setNamespace($namespace)
+	{
+		$this->namespace = $namespace;
 	}
 }
