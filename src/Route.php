@@ -40,6 +40,13 @@ class Route
 	private $action;
 
 	/**
+	 * Namespace for the route
+	 *
+	 * @var string
+	 */
+	private $namespace;
+
+	/**
 	 * Route constructor
 	 *
 	 * @param string         $url
@@ -129,5 +136,25 @@ class Route
 		}
 
 		$this->action = $action;
+	}
+
+	/**
+	 * Get namespace
+	 *
+	 * @return string
+	 */
+	public function getNamespace()
+	{
+		return $this->namespace;
+	}
+
+	/**
+	 * Set namespace
+	 *
+	 * @param string $namespace
+	 */
+	public function setNamespace($namespace)
+	{
+		$this->namespace = $namespace;
 	}
 }

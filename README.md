@@ -3,8 +3,6 @@
 
 [![Build Status](https://travis-ci.org/stein189/Simple-PHP-Router.svg?branch=master)](https://travis-ci.org/stein189/Simple-PHP-Router)
 
-Note: This package is still in development, to use it add "minimum-stability": "dev" to your composer.json.
-
 <h2>Getting started</h2>
 
 <b>Step 1 - .htaccess file</b>
@@ -28,7 +26,7 @@ create an .htaccess file in the root of your project and fill it with the code b
 ````
 
 <b>Step 2 - require szenis/routing</b><br/>
-In your terminal execute: ``composer require szenis/routing 0.*``
+In your terminal execute: ``composer require szenis/routing``
 
 <b>Step 3 - create index.php</b><br/>
 Create the file index.php in the root of your project
@@ -44,7 +42,7 @@ use Szenis\RouteResolver;
 ````
 to your index.php
 
-<b>Step 6 *optional</b><br/>
+<b>Optional</b><br/>
 For debuging purpose add the following to your index.php
 ```php
 error_reporting(E_ALL);
@@ -60,42 +58,55 @@ For the sake of simplicity consider this code to be inside index.php
 $router = new Router();
 
 /**
- * Add a route to the homepage
- * The first argument is the route that we want to look for
- * The second argument are the accepted methods, methods have to be seperated by a |
- * The third and last argument is the full path to the action that has to be executed,
- * this could also be an closure
+ * Route matches the url '/' for the GET method
  */
-$router->add('/', 'GET|PUT', 'App\Controllers\PageController::index');
+$router->add('/', 'GET', function() {
+    // the closure will be executed when route is triggerd and will return 'hello world'
+    return 'hello world!'; 
+});
 
 /**
  * It is posible to add one or multiple wildcards in one route
  */
-$router->add('/user/{id}', 'GET', 'App\Controllers\UserController::show');
-
-/**
- * Closure route example
- */
-$router->add('/user/{id}/edit', 'GET|POST', function($id) {
-    echo $id;
-
-    return;
+$router->add('/user/{id}', 'GET', function($id) {
+    return $id;
 });
 
+/**
+ * It is also posible to allow mulitple methods for one route (methods should be separated with a '|')
+ */
+$router->add('/user/{id}/edit', 'GET|POST', function($id) {
+    return 'user id: '.$id;
+});
+
+/**
+ * Or when u are using controllers in a namespace you could give the full path to a controller (controller::action)
+ */
+$router->add('/user/{id}/delete', 'DELETE', 'App\Controllers\UserController::delete');
+
+/**
+ * When all the controller are in the same namespace you could set the default namespace like so
+ */
+$router->setNamespace('App\\Controllers\\');
+
+/**
+ * The route now uses the default namespace + the given namespace
+ */
+$router->add('/user/{id}/update', 'PUT', 'UserController::update');
+
+/**
+ * After all the routes are created the resolver must be initialized
+ */
 $resolver = new RouteResolver($router);
 
 /**
- * resolve the route
- * the resolve function will search for an matching route
- * when a matching route is found the given function will be triggerd. 
- * lets asume we have triggerd the route: /user/10
- * the function `show` from the class `UserController` will be called
- * the wildcard which is the number `10` will be passed on to the `show` function
+ * resolve the route and receive the response
  */
-$resolver->resolve([
+$response = $resolver->resolve([
 	'uri' => $_SERVER['REQUEST_URI'],
 	'method' => $_SERVER['REQUEST_METHOD'],
 ]);
+
 ````
 
 <b>When a route is not found an RouteNotFoundException will be thrown</b>
@@ -133,10 +144,10 @@ The following options exist
 </p>
 
 ```php
-// In this case the id may be a number
+// The id must be a number
 $router->add('/user/{n:id}', 'GET', 'App\Controllers\UserController::show');
 
-// In this case the id may only contain alfabetic chars or numbers (or both)
+// The id must contain either alfabetic chars or numbers
 $router->add('/user/{an:id}', 'GET', 'App\Controllers\UserController::show');
 
 // Now we want everything behind docs/ in the page variable
@@ -153,6 +164,10 @@ $router->add('/hello/{a:name}/{?:lastname}', 'GET', function($name, $lastname = 
 ````
 
 <h2>Changelog</h2>
+
+<b>v1.0.0</b>
+- Updated readme
+- Posible to add default namespace
 
 <b>v0.9.0</b>
 - 100% test coverage
