@@ -198,7 +198,6 @@ $router->add('/hello/{a:name}/{?:lastname}', 'GET', function($name, $lastname = 
 <b>v0.2.0</b>
 - RouteResolver uses regex to match routes quicker
 
-<h2>Coming soon</h2>
-- Stable release (v1)
+<hr/>
 
 Click <a href="https://github.com/stein189/SimpleRoutingExample/tree/master">here</a> to see the working example.
