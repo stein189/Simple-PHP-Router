@@ -32,6 +32,80 @@ class RouterTest extends BaseTest
 	}
 
 	/**
+	 * Test the get method
+	 */
+	public function testGet()
+	{
+		$this->router->get('/get/route', function(){});
+
+		$routes = $this->router->getRoutesByMethod('GET');
+
+		$this->assertEquals(1, count($routes));
+	}
+
+	/**
+	 * Test the post method
+	 */
+	public function testPost()
+	{
+		$this->router->post('/post/route', function(){});
+
+		$routes = $this->router->getRoutesByMethod('POST');
+
+		$this->assertEquals(1, count($routes));
+	}
+
+	/**
+	 * Test the put method
+	 */
+	public function testPut()
+	{
+		$this->router->put('/put/route', function(){});
+
+		$routes = $this->router->getRoutesByMethod('PUT');
+
+		$this->assertEquals(1, count($routes));
+	}
+
+	/**
+	 * Test the patch method
+	 */
+	public function testPatch()
+	{
+		$this->router->patch('/patch/route', function(){});
+
+		$routes = $this->router->getRoutesByMethod('PATCH');
+
+		$this->assertEquals(1, count($routes));
+	}
+
+	/**
+	 * Test the delete method
+	 */
+	public function testDelete()
+	{
+		$this->router->delete('/delete/route', function(){});
+
+		$routes = $this->router->getRoutesByMethod('DELETE');
+
+		$this->assertEquals(1, count($routes));
+	}
+
+	/**
+	 * Test the any method
+	 */
+	public function testAny()
+	{
+		$this->router->any('/any/route', function(){});
+
+		$getRoutes = $this->router->getRoutesByMethod('GET');
+		$putRoutes = $this->router->getRoutesByMethod('PUT');
+
+		$this->assertEquals(1, count($getRoutes));
+		$this->assertEquals(1, count($putRoutes));
+	}
+
+	/**
 	 * Test getAll method and expects 2 results
 	 */
 	public function testGetAll()
@@ -39,7 +113,7 @@ class RouterTest extends BaseTest
 		$this->router->add('/', 'GET', function(){});
 		$this->router->add('/test', 'POST', function(){});
 
-		$routes = $this->router->getAll();
+		$routes = $this->router->getAllRoutes();
 
 		$this->assertEquals(2, count($routes));
 	}
@@ -52,7 +126,7 @@ class RouterTest extends BaseTest
 		$this->router->add('/', 'GET', function(){});
 		$this->router->add('/test', 'POST', function(){});
 
-		$routes = $this->router->getByMethod('GET');
+		$routes = $this->router->getRoutesByMethod('GET');
 
 		$this->assertEquals(1, count($routes));
 	}
@@ -64,7 +138,7 @@ class RouterTest extends BaseTest
 	{
 		$this->router->add('/', 'GET', function(){});
 
-		$routes = $this->router->getByMethod('POST');
+		$routes = $this->router->getRoutesByMethod('POST');
 
 		$this->assertEquals(0, count($routes));
 	}

@@ -94,6 +94,18 @@ $router->setNamespace('App\\Controllers\\');
  */
 $router->add('/user/{id}/update', 'PUT', 'UserController::update');
 
+
+/**
+ * Since version 1.1 there are shortcut methods for get, post, put, patch, delete and any.
+ * You can use them as follow
+ */
+$router->get('/example/get', function() {});        // Will match GET requests
+$router->post('/example/post', function() {});      // Will match POST requests
+$router->put('/example/put', function() {});        // Will match PUT requests
+$router->patch('/example/patch', function() {});    // Will match PATCH requests
+$router->delete('/example/delete', function() {});  // Will match DELETE requests
+$router->any('/example/any', function() {});        // Will match GET, POST, PUT, PATCH, DELETE requests
+
 /**
  * After all the routes are created the resolver must be initialized
  */
@@ -164,6 +176,9 @@ $router->add('/hello/{a:name}/{?:lastname}', 'GET', function($name, $lastname = 
 ````
 
 <h2>Changelog</h2>
+
+<b>v1.1.0</b>
+- Shortcut functions for get, post, put, patch, delete and any
 
 <b>v1.0.0</b>
 - Updated readme

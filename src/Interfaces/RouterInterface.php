@@ -30,7 +30,7 @@ interface RouterInterface
 	 *
 	 * @return array
 	 */
-	public function getAll();
+	public function getAllRoutes();
 
 	/**
 	 * Get routes by method
@@ -39,5 +39,5 @@ interface RouterInterface
 	 *
 	 * @return array
 	 */
-	public function getByMethod($method);
+	public function getRoutesByMethod($method);
 }
