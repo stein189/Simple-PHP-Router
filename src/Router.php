@@ -59,11 +59,91 @@ class Router implements RouterInterface
 	}
 
 	/**
+	 * Add a route with get method
+	 *
+	 * @param  string $url
+	 * @param  mixed  $action
+	 * 
+	 * @return void
+	 */
+	public function get($url, $action)
+	{
+		$this->add($url, 'GET', $action);
+	}
+
+	/**
+	 * Add a route with post method
+	 *
+	 * @param  string $url
+	 * @param  mixed  $action
+	 * 
+	 * @return void
+	 */
+	public function post($url, $action)
+	{
+		$this->add($url, 'POST', $action);
+	}
+
+	/**
+	 * Add a route with put method
+	 *
+	 * @param  string $url
+	 * @param  mixed  $action
+	 * 
+	 * @return void
+	 */
+	public function put($url, $action)
+	{
+		$this->add($url, 'PUT', $action);
+	}
+
+	/**
+	 * Add a route with patch method
+	 *
+	 * @param  string $url
+	 * @param  mixed  $action
+	 * 
+	 * @return void
+	 */
+	public function patch($url, $action)
+	{
+		$this->add($url, 'PATCH', $action);
+	}
+
+	/**
+	 * Add a route with delete method
+	 *
+	 * @param  string $url
+	 * @param  mixed  $action
+	 * 
+	 * @return void
+	 */
+	public function delete($url, $action)
+	{
+		$this->add($url, 'DELETE', $action);
+	}
+
+	/**
+	 * Add a route for all posible methods
+	 *
+	 * @param  string $url
+	 * @param  mixed  $action
+	 *
+	 * @return void
+	 */
+	public function any($url, $action)
+	{
+		$this->add($url, 'GET|POST|PUT|PATCH|DELETE', $action);
+	}
+
+	/**
 	 * Add new route to routes array
 	 *
 	 * @param  string $url
 	 * @param  string $method
-	 * @param  string $action
+	 * @param  mixed  $action
+	 *
+	 * @return void
 	 */
 	public function add($url, $method, $action)
 	{	
@@ -78,13 +158,13 @@ class Router implements RouterInterface
 	}
 
 	/**
-	 * Get RouteCollection
+	 * Set namespace
 	 *
-	 * @return RouteCollection
+	 * @param string $namespace
 	 */
-	public function getAll()
+	public function setNamespace($namespace)
 	{
-		return $this->routes;
+		$this->namespace = $namespace;
 	}
 
 	/**
@@ -94,22 +174,18 @@ class Router implements RouterInterface
 	 *
 	 * @return array
 	 */
-	public function getByMethod($method)
+	public function getRoutesByMethod($method)
 	{
-		if ($this->routesByMethod && isset($this->routesByMethod[$method])) {
-			return $this->routesByMethod[$method];
-		}
-
-		return array();
+		return ($this->routesByMethod && isset($this->routesByMethod[$method])) ? $this->routesByMethod[$method] : array();
 	}
 
 	/**
-	 * Set namespace
+	 * Get all routes
 	 *
-	 * @param string $namespace
+	 * @return array
 	 */
-	public function setNamespace($namespace)
+	public function getAllRoutes()
 	{
-		$this->namespace = $namespace;
+		return $this->routes;
 	}
 }
