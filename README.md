@@ -1,6 +1,7 @@
 # Simple PHP Router
 
-
+[![Latest Stable Version](https://poser.pugx.org/szenis/routing/v/stable)](https://packagist.org/packages/szenis/routing)
+[![Total Downloads](https://poser.pugx.org/szenis/routing/downloads)](https://packagist.org/packages/szenis/routing)
 [![Build Status](https://travis-ci.org/stein189/Simple-PHP-Router.svg?branch=master)](https://travis-ci.org/stein189/Simple-PHP-Router)
 
 <h2>Getting started</h2>
