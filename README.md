@@ -8,7 +8,7 @@
 
 <b>Step 1 - .htaccess file</b>
 create an .htaccess file in the root of your project and fill it with the code below:
-````
+```
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews
@@ -119,8 +119,7 @@ $response = $resolver->resolve([
 	'uri' => $_SERVER['REQUEST_URI'],
 	'method' => $_SERVER['REQUEST_METHOD'],
 ]);
-
-````
+```
 
 <b>When a route is not found an RouteNotFoundException will be thrown</b>
 <p>Its posible to catch this exception and display a good looking 404 page, the try catch block will look something like this</p>
