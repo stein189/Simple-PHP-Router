@@ -24,7 +24,7 @@ create an .htaccess file in the root of your project and fill it with the code b
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
-````
+```
 
 <b>Step 2 - require szenis/routing</b><br/>
 In your terminal execute: ``composer require szenis/routing``
@@ -40,7 +40,7 @@ Add
 ```php
 use Szenis\Router;
 use Szenis\RouteResolver;
-````
+```
 to your index.php
 
 <b>Optional</b><br/>
@@ -48,7 +48,7 @@ For debuging purpose add the following to your index.php
 ```php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-````
+```
 
 <h2>Usage</h2>
 For the sake of simplicity consider this code to be inside index.php
@@ -140,7 +140,7 @@ try {
     // it is not necessary to catch this exception as this exception should never occur in production
     die($e->getMessage());
 }
-````
+```
 
 <h2>Wildcard options</h2>
 The following options exist
@@ -174,7 +174,7 @@ $router->add('/hello/{a:name}/{?:lastname}', 'GET', function($name, $lastname = 
     // check if lastname is provided
     // if ($lastname) {...}
 })
-````
+```
 
 <h2>Changelog</h2>
 
