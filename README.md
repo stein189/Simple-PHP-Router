@@ -52,7 +52,9 @@ ini_set('display_errors', 1);
 
 <h2>Usage</h2>
 For the sake of simplicity consider this code to be inside index.php
+
 ```php
+
 /**
  * initialize the router class
  */
