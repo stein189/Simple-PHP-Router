@@ -32,14 +32,17 @@ In your terminal execute: ``composer require szenis/routing``
 <b>Step 3 - create index.php</b><br/>
 Create the file index.php in the root of your project
 
-<b>Step 4 - require autoload.php</b><br/>
-Require vendor/autoload.php in your index.php
+<b>Step 4 - require autoload.php and use the Router</b><br/>
 
-<b>Step 5 - use Router</b><br/>
 Add 
 ```php
+<?php
+
+require './vendor/autoload.php';
+
 use Szenis\Router;
 use Szenis\RouteResolver;
+
 ```
 to your index.php
 
