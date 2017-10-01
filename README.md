@@ -4,7 +4,7 @@
 [![Total Downloads](https://poser.pugx.org/szenis/routing/downloads)](https://packagist.org/packages/szenis/routing)
 [![Build Status](https://travis-ci.org/stein189/Simple-PHP-Router.svg?branch=master)](https://travis-ci.org/stein189/Simple-PHP-Router)
 
-**Updating from version 0.* or 1.* will break your code! read the documentation before upgrading!**
+**Updating from version 0.x or 1.x will break your code! read the documentation before upgrading!**
 
 <h2>Getting started</h2>
 
@@ -78,6 +78,7 @@ ini_set('display_errors', 1);
 ```
 
 <h2>Usage</h2>
+
 ```php
 
 /**
@@ -195,7 +196,7 @@ $router->add('/hello/{a:name}/{?:lastname}', 'GET', function($name, $lastname = 
 })
 ```
 
-<h2>Upgrading from v0.*/v1.* to v2.*</h2>
+<h2>Upgrading from v0.x/v1.x to v2.x</h2>
 **$router->setNamespace() has been removed**
 
 In version 2 the router does not execute the callable anymore. From now one it is your responsibility to execute the handler.
