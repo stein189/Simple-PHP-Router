@@ -19,9 +19,9 @@ class RouteResolverTest extends BaseTest
 	/**
 	 * Route resolver
 	 *
-	 * @var \Szenis\RouteResolver
+	 * @var \Szenis\Routing\Rou
 	 */
-	private $resolver;
+	private $router;
 
 	/**
 	 * Set up the test case
@@ -29,7 +29,7 @@ class RouteResolverTest extends BaseTest
 	public function setUp()
 	{
 		// initialize router
-		$router = new \Szenis\Router('RouterTests\\');
+		$router = new \Szenis\Routing\Router();
 
 		// add some routes
 		$router->add('/test', 'GET', function(){
@@ -46,12 +46,7 @@ class RouteResolverTest extends BaseTest
 
 		$router->add('/call/controller', 'GET', 'TestController::index');
 
-		$router->setNamespace('');
-		
-		$router->add('/call/controller', 'PUT', 'RouterTests\TestController::index');
-
-		// initialize resolver
-		$this->resolver = new \Szenis\RouteResolver($router);
+		$this->router = $router;
 	}
 
 	/**
@@ -59,14 +54,10 @@ class RouteResolverTest extends BaseTest
 	 */
 	public function testBasicResolve()
 	{
-		$request = array(
-			'uri' => '/test',
-			'method' => 'GET',
-		);
+		$response = $this->router->resolve('/test', 'GET');
 
-		$response = $this->resolver->resolve($request);
-
-		$this->assertEquals('well done', $response);
+		$this->assertEquals(\Szenis\Routing\Route::STATUS_FOUND, $response['code']);
+		$this->assertInstanceOf('Closure', $response['handler']);
 	}
 
 	/**
@@ -74,14 +65,10 @@ class RouteResolverTest extends BaseTest
 	 */
 	public function testResolveWithNormalArgument()
 	{
-		$request = array(
-			'uri' => '/hello/mike',
-			'method' => 'POST',
-		);
+		$response = $this->router->resolve('/hello/mike', 'POST');
 
-		$response = $this->resolver->resolve($request);
-
-		$this->assertEquals('mike', $response);
+		$this->assertEquals(\Szenis\Routing\Route::STATUS_FOUND, $response['code']);
+		$this->assertEquals('mike', $response['arguments']['person']);
 	}
 
 	/**
@@ -89,14 +76,10 @@ class RouteResolverTest extends BaseTest
 	 */
 	public function testResolveWithSpecialArgument()
 	{
-		$request = array(
-			'uri' => '/bye/97722',
-			'method' => 'GET',
-		);
+		$response = $this->router->resolve('/bye/97722', 'GET');
 
-		$response = $this->resolver->resolve($request);
-
-		$this->assertEquals('97722', $response);
+		$this->assertEquals(\Szenis\Routing\Route::STATUS_FOUND, $response['code']);
+		$this->assertEquals('97722', $response['arguments']['number']);
 	}
 	
 	/**
@@ -104,13 +87,9 @@ class RouteResolverTest extends BaseTest
 	 */
 	public function testRouteNotFoundException()
 	{
-		$request = array(
-			'uri' => '/bye/mike',
-			'method' => 'GET',
-		);
+		$response = $this->router->resolve('/bye/mike', 'GET');
 
-		$this->setExpectedException('\Szenis\Exceptions\RouteNotFoundException');
-		$response = $this->resolver->resolve($request);
+		$this->assertEquals(\Szenis\Routing\Route::STATUS_NOT_FOUND, $response['code']);
 	}
 
 	/**
@@ -118,28 +97,9 @@ class RouteResolverTest extends BaseTest
 	 */
 	public function testResolveWithClassPath()
 	{
-		$request = array(
-			'uri' => '/call/controller',
-			'method' => 'GET',
-		);
+		$response = $this->router->resolve('/call/controller', 'GET');
 
-		$response = $this->resolver->resolve($request);
-
-		$this->assertEquals('index called', $response);
-	}
-
-	/**
-	 * Test action after namespace has changed
-	 */
-	public function testNamespace()
-	{
-		$request = array(
-			'uri' => '/call/controller',
-			'method' => 'PUT',
-		);
-
-		$response = $this->resolver->resolve($request);
-
-		$this->assertEquals('index called', $response);
+		$this->assertEquals(\Szenis\Routing\Route::STATUS_FOUND, $response['code']);
+		$this->assertEquals('TestController::index', $response['handler']);
 	}
 }

@@ -28,7 +28,7 @@ class RouterTest extends BaseTest
 	 */
 	public function setUp()
 	{
-		$this->router = new \Szenis\Router();
+		$this->router = new \Szenis\Routing\Router();
 	}
 
 	/**

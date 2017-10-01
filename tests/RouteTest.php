@@ -21,8 +21,8 @@ class RouteTest extends BaseTest
 	 */
 	public function testInvalidArgumentExceptionWithoutArguments()
 	{
-		$this->setExpectedException('\Szenis\Exceptions\InvalidArgumentException');
-		$route = new \Szenis\Route();
+		$this->setExpectedException('\Szenis\Routing\Exceptions\InvalidArgumentException');
+		$route = new \Szenis\Routing\Route();
 	}
 
 	/**
@@ -30,8 +30,8 @@ class RouteTest extends BaseTest
 	 */
 	public function testInvalidArgumentExceptionWith1Argument()
 	{
-		$this->setExpectedException('\Szenis\Exceptions\InvalidArgumentException');
-		$route = new \Szenis\Route('/');
+		$this->setExpectedException('\Szenis\Routing\Exceptions\InvalidArgumentException');
+		$route = new \Szenis\Routing\Route('/', []);
 	}
 
 	/**
@@ -39,8 +39,8 @@ class RouteTest extends BaseTest
 	 */
 	public function testInvalidArgumentExceptionWith2Arguments()
 	{
-		$this->setExpectedException('\Szenis\Exceptions\InvalidArgumentException');
-		$route = new \Szenis\Route('/', 'GET');
+		$this->setExpectedException('\Szenis\Routing\Exceptions\InvalidArgumentException');
+		$route = new \Szenis\Routing\Route('/', [], 'GET');
 	}
 
 	/**
@@ -48,8 +48,8 @@ class RouteTest extends BaseTest
 	 */
 	public function testInvalidArgumentExceptionWithWrongMethod()
 	{
-		$this->setExpectedException('\Szenis\Exceptions\InvalidArgumentException');
-		$route = new \Szenis\Route('/', 'GET', function(){});
+		$this->setExpectedException('\Szenis\Routing\Exceptions\InvalidArgumentException');
+		$route = new \Szenis\Routing\Route('/', [], 'GET', function(){});
 	}
 
 	/**
@@ -57,8 +57,8 @@ class RouteTest extends BaseTest
 	 */
 	public function testInvalidArgumentExceptionWithWrongAction()
 	{
-		$this->setExpectedException('\Szenis\Exceptions\InvalidArgumentException');
-		$route = new \Szenis\Route('/', array('GET'), '');
+		$this->setExpectedException('\Szenis\Routing\Exceptions\InvalidArgumentException');
+		$route = new \Szenis\Routing\Route('/', [], array('GET'), '');
 	}
 
 	/**
@@ -66,14 +66,16 @@ class RouteTest extends BaseTest
 	 */
 	public function testSetRouteMethods()
 	{
-		$route = new \Szenis\Route('/', array('GET'), function(){});
+		$route = new \Szenis\Routing\Route('/', [], array('GET'), function(){});
 
 		$route->setMethod(array('POST'));
 		$route->setUrl('/test');
 		$route->setAction('\App\Controllers\IndexController::index');
+		$route->setArguments(['test', 'test2']);
 
 		$this->assertEquals($route->getMethod(), array('POST'));
 		$this->assertEquals($route->getUrl(), '/test');
 		$this->assertEquals($route->getAction(), '\App\Controllers\IndexController::index');
+		$this->assertEquals($route->getArguments()[1], 'test2');
 	}
 }
