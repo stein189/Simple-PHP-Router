@@ -197,7 +197,7 @@ $router->add('/hello/{a:name}/{?:lastname}', 'GET', function($name, $lastname = 
 ```
 
 <h2>Upgrading from v0.x/v1.x to v2.x</h2>
-**$router->setNamespace() has been removed**
+** $router->setNamespace() has been removed **
 
 In version 2 the router does not execute the callable anymore. From now one it is your responsibility to execute the handler.
 
