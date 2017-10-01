@@ -21,9 +21,21 @@ class RouteFactoryTest extends BaseTest
 	 */
 	public function testCreateRoute()
 	{
-		$factory = new \Szenis\RouteFactory();
+		$factory = new \Szenis\Routing\RouteFactory();
 		$response = $factory->create('/', 'GET', function(){});
 
-		$this->assertInstanceOf('\Szenis\Route', $response);
+		$this->assertInstanceOf('\Szenis\Routing\Route', $response);
+	}
+
+	/**
+	 * Test if the factory created a Route object with arguments
+	 */
+	public function testCreateRouteWithArguments()
+	{
+		$factory = new \Szenis\Routing\RouteFactory();
+		$response = $factory->create('/{a:integer}-{w:word}', 'GET', function(){});
+
+		$this->assertInstanceOf('\Szenis\Routing\Route', $response);
+		$this->assertEquals('word', $response->getArguments()[1]);
 	}
 }

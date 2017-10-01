@@ -9,15 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace Szenis;
+namespace Szenis\Routing;
 
-use Szenis\Exceptions\InvalidArgumentException;
+use Szenis\Routing\Exceptions\InvalidArgumentException;
 
 /**
  * Simple route object
  */
 class Route
 {
+	const STATUS_FOUND = 200;
+	const STATUS_NOT_FOUND = 404;
+
 	/**
 	 * Method of route
 	 *
@@ -35,16 +38,16 @@ class Route
 	/**
 	 * Action that the route will use when called
 	 *
-	 * @var string|function
+	 * @var string|Closure
 	 */
 	private $action;
 
 	/**
-	 * Namespace for the route
+	 * Contains the arguments of the current route
 	 *
-	 * @var string
+	 * @var array
 	 */
-	private $namespace;
+	private $arguments = [];
 
 	/**
 	 * Route constructor
@@ -53,11 +56,12 @@ class Route
 	 * @param array          $method
 	 * @param string|closure $action
 	 */
-	public function __construct($url = null, $method = null, $action = null)
+	public function __construct($url = null, $arguments = null, $method = null, $action = null)
 	{
 		$this->setUrl($url);
 		$this->setMethod($method);
 		$this->setAction($action);
+		$this->arguments = $arguments;
 	}
 
 	/**
@@ -74,6 +78,8 @@ class Route
 	 * Set the method of the current route
 	 *
 	 * @param array $method
+	 *
+	 * @return $this
 	 */
 	public function setMethod($method)
 	{
@@ -88,6 +94,8 @@ class Route
 		}
 
 		$this->method = $method;
+
+		return $this;
 	}
 	
 	/**
@@ -104,6 +112,8 @@ class Route
 	 * Set url
 	 *
 	 * @param string $url
+	 *
+	 * @return $this
 	 */
 	public function setUrl($url)
 	{
@@ -112,6 +122,8 @@ class Route
 		}
 
 		$this->url = $url;
+
+		return $this;
 	}
 	
 	/**
@@ -128,6 +140,8 @@ class Route
 	 * Set action 
 	 * 
 	 * @param string|function $action
+	 *
+	 * @return $this
 	 */
 	public function setAction($action)
 	{
@@ -136,25 +150,27 @@ class Route
 		}
 
 		$this->action = $action;
+
+		return $this;
 	}
 
 	/**
-	 * Get namespace
-	 *
-	 * @return string
+	 * @return array
 	 */
-	public function getNamespace()
+	public function getArguments()
 	{
-		return $this->namespace;
+		return $this->arguments;
 	}
 
 	/**
-	 * Set namespace
+	 * @param array $arguments
 	 *
-	 * @param string $namespace
+	 * @return $this
 	 */
-	public function setNamespace($namespace)
+	public function setArguments(array $arguments)
 	{
-		$this->namespace = $namespace;
+		$this->arguments = $arguments;
+
+		return $this;
 	}
 }

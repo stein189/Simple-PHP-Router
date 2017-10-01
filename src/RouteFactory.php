@@ -9,15 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Szenis;
+namespace Szenis\Routing;
 
-use Szenis\Interfaces\RouteFactoryInterface;
-use Szenis\Route;
+use Szenis\Routing\Route;
 
 /**
  * Route builder
  */
-class RouteFactory implements RouteFactoryInterface
+class RouteFactory
 {
 	/**
 	 * Patterns that should be replaced
@@ -26,13 +25,13 @@ class RouteFactory implements RouteFactoryInterface
 	 */
 	private $patterns = array(
 		'~/~',			     // slash
-		'~{an:[^\/]+}~',     // placeholder accepts alphabetic and numeric chars
-		'~{n:[^\/]+}~',      // placeholder accepts only numeric
-		'~{a:[^\/]+}~',      // placeholder accepts only alphabetic chars
-		'~{w:[^\/]+}~',      // placeholder accepts alphanumeric and underscore
-		'~{\*:[^\/]+}~',     // placeholder match rest of url
-		'~\\\/{\?:[^\/]+}~', // optional placeholder
-		'~{[^\/]+}~',	     // normal placeholder
+		'~{an:[^\/{}]+}~',     // placeholder accepts alphabetic and numeric chars
+		'~{n:[^\/{}]+}~',      // placeholder accepts only numeric
+		'~{a:[^\/{}]+}~',      // placeholder accepts only alphabetic chars
+		'~{w:[^\/{}]+}~',      // placeholder accepts alphanumeric and underscore
+		'~{\*:[^\/{}]+}~',     // placeholder match rest of url
+		'~\\\/{\?:[^\/{}]+}~', // optional placeholder
+		'~{[^\/{}]+}~',	     // normal placeholder
 	);
 
 	/**
@@ -62,7 +61,12 @@ class RouteFactory implements RouteFactoryInterface
 	 */
 	public function create($url, $method, $action)
 	{
-		return new Route($this->parseUrl($url), $this->parseMethod($method), $action);
+		return new Route(
+			$this->parseUrl($url), 
+			$this->parseArguments($url),
+			$this->parseMethod($method), 
+			$action
+		);
 	}
 
 	/**
@@ -75,10 +79,25 @@ class RouteFactory implements RouteFactoryInterface
 	private function parseUrl($url)
 	{
 		$newUrl = preg_replace($this->patterns, $this->replacements, $url);
-
 		$newUrl = trim($newUrl, '\/');
 
 		return $newUrl;
+	}
+
+	/**
+	 * @param  string $url
+	 *
+	 * @return array
+	 */
+	private function parseArguments($url)
+	{
+		preg_match_all('~{(n:|a:|an:|w:|\*:|\?:)?([a-zA-Z0-9]+)}~', $url, $matches);
+
+		if (isset($matches[2]) && !empty($matches[2])) {
+			return $matches[2];
+		}
+
+		return [];
 	}
 
 	/**

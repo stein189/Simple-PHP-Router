@@ -19,7 +19,7 @@
    },
    "autoload": {
       "psr-4": {
-         "Szenis\\": "src/"
+         "Szenis\\Routing\\": "src/"
       }
    }
 }

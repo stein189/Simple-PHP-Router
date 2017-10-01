@@ -4,6 +4,8 @@
 [![Total Downloads](https://poser.pugx.org/szenis/routing/downloads)](https://packagist.org/packages/szenis/routing)
 [![Build Status](https://travis-ci.org/stein189/Simple-PHP-Router.svg?branch=master)](https://travis-ci.org/stein189/Simple-PHP-Router)
 
+**Updating from version 0.x or 1.x will break your code! read the documentation before upgrading!**
+
 <h2>Getting started</h2>
 
 <b>Step 1 - .htaccess file</b>
@@ -34,14 +36,36 @@ Create the file index.php in the root of your project
 
 <b>Step 4 - require autoload.php and use the Router</b><br/>
 
-Add 
+The following snippet shows how the router can be used.
+
 ```php
 <?php
 
 require './vendor/autoload.php';
 
-use Szenis\Router;
-use Szenis\RouteResolver;
+use Szenis\Routing\Router;
+
+$router = new Router();
+$router->get('/{n:date}-{w:item}', function($date, $item) {
+    return 'hello world';
+});
+
+$response = $router->resolve($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
+
+switch ($response['code']) {
+    case \Szenis\Routing\Route::STATUS_NOT_FOUND:
+        // render your 404 page here...
+        break;
+    
+    case \Szenis\Routing\Route::STATUS_FOUND:
+        // the router only resolves the route, here is an example how to execute the route.
+        if ($response['handler'] instanceof \Closure) {
+            echo call_user_func_array($response['handler'], $response['arguments']);
+        }
+        
+        break;
+}
+
 
 ```
 to your index.php
@@ -54,7 +78,6 @@ ini_set('display_errors', 1);
 ```
 
 <h2>Usage</h2>
-For the sake of simplicity consider this code to be inside index.php
 
 ```php
 
@@ -87,19 +110,10 @@ $router->add('/user/{id}/edit', 'GET|POST', function($id) {
 
 /**
  * Or when u are using controllers in a namespace you could give the full path to a controller (controller::action)
+ *
+ * Since version 2.0 executing the handler is up to you.
  */
 $router->add('/user/{id}/delete', 'DELETE', 'App\Controllers\UserController::delete');
-
-/**
- * When all the controller are in the same namespace you could set the default namespace like so
- */
-$router->setNamespace('App\\Controllers\\');
-
-/**
- * The route now uses the default namespace + the given namespace
- */
-$router->add('/user/{id}/update', 'PUT', 'UserController::update');
-
 
 /**
  * Since version 1.1 there are shortcut methods for get, post, put, patch, delete and any.
@@ -113,37 +127,39 @@ $router->delete('/example/delete', function() {});  // Will match DELETE request
 $router->any('/example/any', function() {});        // Will match GET, POST, PUT, PATCH, DELETE requests
 
 /**
- * After all the routes are created the resolver must be initialized
+ * resolve the route and receive the response
+ *
+ * The response is an array with the following keys
+ * - code (contains 200 if the route is found, else 404)
+ * - handler (contains the handler, often a \Closure or full path to your controller action)
+ * - arguments (contains the route arguments if any)
  */
-$resolver = new RouteResolver($router);
+$response = $router->resolve($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
 
 /**
- * resolve the route and receive the response
+ * To execute your route you have to do the following
  */
-$response = $resolver->resolve([
-	'uri' => $_SERVER['REQUEST_URI'],
-	'method' => $_SERVER['REQUEST_METHOD'],
-]);
-```
 
-<b>When a route is not found an RouteNotFoundException will be thrown</b>
-<p>Its posible to catch this exception and display a good looking 404 page, the try catch block will look something like this</p>
+switch ($response['code']) {
+    case \Szenis\Routing\Route::STATUS_NOT_FOUND:
+        // render your 404 page here...
+        break;
+    
+    case \Szenis\Routing\Route::STATUS_FOUND:
+        // the router only resolves the route, here is an example how to execute the route.
+        if ($response['handler'] instanceof \Closure) {
+            echo call_user_func_array($response['handler'], $response['arguments']);
+        }
+        
+        // if your handler is a full path to your function you could execute it with this:
+        $className = substr($response['handler'], 0, strpos($response['handler'], '::'));
+        $functionName = substr($response['handler'], strpos($response['handler'], '::') + 2);
 
-```php
-try {
-    // You have to resolve the route inside the try block
-    $resolver->resolve([
-        'uri' => $_SERVER['REQUEST_URI'],
-        'method' => $_SERVER['REQUEST_METHOD'],
-    ]);
-} catch (Szenis\Exceptions\RouteNotFoundException $e) {
-    // route not found, add a nice 404 page here if you like 
-    die($e->getMessage());
-} catch (Szenis\Exceptions\InvalidArgumentException $e) {
-    // when an arguments of a route is missing an InvalidArgumentException will be thrown 
-    // it is not necessary to catch this exception as this exception should never occur in production
-    die($e->getMessage());
+        echo call_user_func_array(array((new $className), $functionName), $response['arguments']);
+
+        break;
 }
+
 ```
 
 <h2>Wildcard options</h2>
@@ -180,7 +196,20 @@ $router->add('/hello/{a:name}/{?:lastname}', 'GET', function($name, $lastname = 
 })
 ```
 
+<h2>Upgrading from v0.x/v1.x to v2.x</h2>
+$router->setNamespace() has been removed!
+
+In version 2 the router does not execute the callable anymore. From now one it is your responsibility to execute the handler.
+
+At the bottom of the section 'Usage' there is an example how to execute the handler.
+
 <h2>Changelog</h2>
+
+<b>v2.0.0</b>
+- Removed 'default' namespace
+- Router does not execute the callable itself, this gives you more control over parameter injection
+- RouteResolver is callable trough the router
+- Bugfix: it is now possible to have more then one parameter in one segment (/{parameter1}-{parameter2}/)
 
 <b>v1.1.0</b>
 - Shortcut functions for get, post, put, patch, delete and any
@@ -217,7 +246,3 @@ $router->add('/hello/{a:name}/{?:lastname}', 'GET', function($name, $lastname = 
 
 <b>v0.2.0</b>
 - RouteResolver uses regex to match routes quicker
-
-<hr/>
-
-Click <a href="https://github.com/stein189/SimpleRoutingExample/tree/master">here</a> to see the working example.

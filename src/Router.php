@@ -9,17 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Szenis;
+namespace Szenis\Routing;
 
-use Szenis\Interfaces\RouterInterface;
-use Szenis\RouteFactory;
+use Szenis\Routing\RouteFactory;
+use Szenis\Routing\RouteResolver;
 
 /**
- * Simple routing collection class
- *
- * @implements RouterInterface
+ * Simple routing class
  */
-class Router implements RouterInterface
+class Router
 {
 	/**
 	 * Route factory
@@ -29,11 +27,11 @@ class Router implements RouterInterface
 	private $factory;
 
 	/**
-	 * Default namespace
-	 *
-	 * @var string
+	 * Route resolver
+	 * 
+	 * @var RouteResolver
 	 */
-	private $namespace;
+	private $resolver;
 
 	/**
 	 * An array with all the registerd routes
@@ -52,10 +50,21 @@ class Router implements RouterInterface
 	/**
 	 * Router constructor
 	 */
-	public function __construct($namespace = '')
+	public function __construct()
 	{
+		$this->resolver = new RouteResolver();
 		$this->factory = new RouteFactory();
-		$this->namespace = $namespace;
+	}
+
+	/**
+	 * @param string $uri
+	 * @param string $method
+	 *
+	 * @return array
+	 */
+	public function resolve($uri, $method)
+	{
+		return $this->resolver->resolve($this, $uri, $method);
 	}
 
 	/**
@@ -148,23 +157,12 @@ class Router implements RouterInterface
 	public function add($url, $method, $action)
 	{	
 		$route = $this->factory->create($url, $method, $action);
-		$route->setNamespace($this->namespace);
 
 		$this->routes[] = $route;
 
 		foreach ($route->getMethod() as $method) {
 			$this->routesByMethod[$method][] = $route;
 		}
-	}
-
-	/**
-	 * Set namespace
-	 *
-	 * @param string $namespace
-	 */
-	public function setNamespace($namespace)
-	{
-		$this->namespace = $namespace;
 	}
 
 	/**

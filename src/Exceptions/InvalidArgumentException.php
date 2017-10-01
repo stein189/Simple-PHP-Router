@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
  
-namespace Szenis\Exceptions;
+namespace Szenis\Routing\Exceptions;
 
 class InvalidArgumentException extends \Exception
 {

@@ -9,10 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Szenis;
+namespace Szenis\Routing;
 
-use Szenis\Exceptions\RouteNotFoundException;
-use Szenis\Interfaces\RouterInterface;
+use Szenis\Routing\Router;
 
 /**
  * Class resolves the given route or throws an exception
@@ -20,36 +19,20 @@ use Szenis\Interfaces\RouterInterface;
 class RouteResolver
 {
 	/**
-	 * Collection with routes
-	 *
-	 * @var Router
-	 */
-	private $router;
-
-	/**
-	 * RouteResolver constructor
-	 *
-	 * @param Router $router
-	 */
-	public function __construct(RouterInterface $router)
-	{
-		$this->router = $router;
-	}
-
-	/**
 	 * Resolve the given url and call the method that belongs to the route
 	 *
-	 * @param  array $request [contains the uri and the request method]
+	 * @param  Router $router
+	 * @param  string $uri
+	 * @param  string $method
 	 *
-	 * @return mixed
+	 * @return array
 	 */
-	public function resolve($request)
+	public function resolve(Router $router, $uri, $method)
 	{
 		// get all register routes with the same request method
-		$routes = $this->router->getRoutesByMethod($request['method']);
+		$routes = $router->getRoutesByMethod($method);
 		// remove trailing and leading slash
-		$requestedUri = trim(preg_replace('/\?.*/', '', $request['uri']), '/');
-
+		$requestedUri = trim(preg_replace('/\?.*/', '', $uri), '/');
 		// loop trough the posible routes
 		foreach ($routes as $route) {
 			$matches = array();
@@ -57,20 +40,21 @@ class RouteResolver
 			// if the requested route matches one of the defined routes
 			if ($route->getUrl() === $requestedUri || preg_match('~^'.$route->getUrl().'$~', $requestedUri, $matches)) {
 				$arguments = $this->getArguments($matches);
+				$arguments = array_combine($route->getArguments(), $arguments);
 
-				if (is_object($route->getAction()) && ($route->getAction() instanceof \Closure)) {
-					return call_user_func_array($route->getAction(), $arguments);
-				}
-
-				$className = $route->getNamespace() . substr($route->getAction(), 0, strpos($route->getAction(), '::'));
-				$functionName = substr($route->getAction(), strpos($route->getAction(), '::') + 2);
-
-				return call_user_func_array(array((new $className), $functionName), $arguments);
+				return [
+					'code' => Route::STATUS_FOUND,
+					'handler' => $route->getAction(),
+					'arguments' => $arguments
+				];
 			}
 		}
 
-		// if no route is found throw an RouteNotFoundException
-		throw new RouteNotFoundException($request['method'].' '.$request['uri'].' not found');
+		return [
+			'code' => Route::STATUS_NOT_FOUND,
+			'handler' => null,
+			'arguments' => []
+		];
 	}
 
 	/**
