@@ -197,17 +197,17 @@ $router->add('/hello/{a:name}/{?:lastname}', 'GET', function($name, $lastname = 
 ```
 
 <h2>Upgrading from v0.x/v1.x to v2.x</h2>
-$router->setNamespace() has been removed!
 
-In version 2 the router does not execute the callable anymore. From now one it is your responsibility to execute the handler.
-
-At the bottom of the section 'Usage' there is an example how to execute the handler.
+- Namespace has changed from ``\Szenis`` to ``\Szenis\Routing``
+- ``$router->setNamespace()`` has been removed!
+- RouteResolver shouldnt be used to resolve routes, use the following instead ``$router->resolve($uri, $method);``
+- Router does not execute the route anymore. From now one it is your responsibility to execute the handler. At the bottom of the section 'Usage' there is an example how to execute the handler.
 
 <h2>Changelog</h2>
 
 <b>v2.0.0</b>
 - Removed 'default' namespace
-- Changed namespace from /Szenis to /Szenis/Routing
+- Changed namespace from \Szenis to \Szenis\Routing
 - Router does not execute the callable itself, this gives you more control over parameter injection
 - RouteResolver is callable trough the router
 - Bugfix: it is now possible to have more then one parameter in one segment (/{parameter1}-{parameter2}/)
