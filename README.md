@@ -207,6 +207,7 @@ At the bottom of the section 'Usage' there is an example how to execute the hand
 
 <b>v2.0.0</b>
 - Removed 'default' namespace
+- Changed namespace from /Szenis to /Szenis/Routing
 - Router does not execute the callable itself, this gives you more control over parameter injection
 - RouteResolver is callable trough the router
 - Bugfix: it is now possible to have more then one parameter in one segment (/{parameter1}-{parameter2}/)
