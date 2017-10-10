@@ -92,7 +92,7 @@ class RouteFactory
 	 */
 	private function parseArguments($url)
 	{
-		preg_match_all('~{(n:|a:|an:|w:|\*:|\?:)?([a-zA-Z0-9]+)}~', $url, $matches);
+		preg_match_all('~{(n:|a:|an:|w:|\*:|\?:)?([a-zA-Z0-9_]+)}~', $url, $matches);
 
 		if (isset($matches[2]) && !empty($matches[2])) {
 			return $matches[2];
