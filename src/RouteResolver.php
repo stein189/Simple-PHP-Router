@@ -39,13 +39,27 @@ class RouteResolver
 
 			// if the requested route matches one of the defined routes
 			if ($route->getUrl() === $requestedUri || preg_match('~^'.$route->getUrl().'$~', $requestedUri, $matches)) {
+				$argumentArray = array();
 				$arguments = $this->getArguments($matches);
-				$arguments = array_combine($route->getArguments(), $arguments);
+
+				// check if there route has arguments
+				if (is_array($route->getArguments()) && count($route->getArguments()) > 0) {
+					// loop trough all the arguments
+					foreach ($route->getArguments() as $key => $argument) {
+						// if the argument exists set the value
+						if (isset($arguments[$key])) {
+							$argumentArray[$argument] = $arguments[$key];
+						} else {
+							// setting the value to null should only occure when we use an optional parameter
+							$argumentArray[$argument] = null;
+						}
+					}
+				}
 
 				return [
 					'code' => Route::STATUS_FOUND,
 					'handler' => $route->getAction(),
-					'arguments' => $arguments
+					'arguments' => $argumentArray
 				];
 			}
 		}
