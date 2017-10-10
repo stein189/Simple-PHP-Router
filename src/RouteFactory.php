@@ -79,6 +79,7 @@ class RouteFactory
 	private function parseUrl($url)
 	{
 		$newUrl = preg_replace($this->patterns, $this->replacements, $url);
+		$newUrl = trim($newUrl, '\/?');
 		$newUrl = trim($newUrl, '\/');
 
 		return $newUrl;
