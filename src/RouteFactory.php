@@ -24,14 +24,14 @@ class RouteFactory
 	 * @var array
 	 */
 	private $patterns = array(
-		'~/~',			     // slash
-		'~{an:[^\/{}]+}~',     // placeholder accepts alphabetic and numeric chars
-		'~{n:[^\/{}]+}~',      // placeholder accepts only numeric
-		'~{a:[^\/{}]+}~',      // placeholder accepts only alphabetic chars
-		'~{w:[^\/{}]+}~',      // placeholder accepts alphanumeric and underscore
-		'~{\*:[^\/{}]+}~',     // placeholder match rest of url
-		'~\\\/{\?:[^\/{}]+}~', // optional placeholder
-		'~{[^\/{}]+}~',	     // normal placeholder
+		'~/~',			     		// slash
+		'~{an:[^\/{}]+}~',     		// placeholder accepts alphabetic and numeric chars
+		'~{n:[^\/{}]+}~',      		// placeholder accepts only numeric
+		'~{a:[^\/{}]+}~',      		// placeholder accepts only alphabetic chars
+		'~{w:[^\/{}]+}~',      		// placeholder accepts alphanumeric and underscore
+		'~{\*:[^\/{}]+}~',     		// placeholder match rest of url
+		'~(\\\/)?{\?:[^\/{}]+}~', 	// optional placeholder
+		'~{[^\/{}]+}~',	     	  	// normal placeholder
 	);
 
 	/**
